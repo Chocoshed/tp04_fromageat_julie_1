@@ -44,7 +44,7 @@
             [href]="'https://www.google.com/maps?q=' + pollution.latitude + ',' + pollution.longitude"
             target="_blank"
             class="text-blue-600 hover:underline text-sm">
-            📍 Voir sur Google Maps
+            Voir sur Google Maps
           </a>
         </div>
 
@@ -64,12 +64,12 @@
         <a
           [routerLink]="['/pollutions', pollution.id, 'edit']"
           class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
-          ✏️ Modifier
+           Modifier
         </a>
         <button
           (click)="onDelete()"
           class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition">
-          🗑️ Supprimer
+          Supprimer
         </button>
       </div>
     </div>
