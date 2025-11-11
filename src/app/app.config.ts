@@ -5,7 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { routes } from './app.routes';
 
-const API_URL = 'http://localhost:3000/api';
+const API_URL = 'https://tp-4-latest.onrender.com/api';
 
 export const appConfig: ApplicationConfig = {
   providers: [
