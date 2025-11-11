@@ -1,81 +1,84 @@
-<div class="p-6 max-w-4xl mx-auto">
-  <div class="flex justify-between items-center mb-6">
-    <h2 class="text-2xl font-bold">Détail de la pollution</h2>
-    <a routerLink="/pollutions" class="text-blue-600 hover:underline">← Retour à la liste</a>
+<div class="detail-container">
+  <div class="detail-header">
+    <h2>Détail de la pollution</h2>
+    <a routerLink="/pollutions" class="btn-back">← Retour à la liste</a>
   </div>
 
   @if (isLoading) {
-    <div class="text-center py-8">
-      <p class="text-gray-600">Chargement...</p>
+    <div class="loading-state">
+      <div class="loading-spinner">⏳</div>
+      <p>Chargement...</p>
     </div>
   } @else if (pollution) {
-    <div class="bg-white shadow-lg rounded-lg p-6 space-y-4">
-      <div class="border-b pb-4">
-        <h3 class="text-3xl font-bold text-gray-800">{{ pollution.titre }}</h3>
-        <span class="inline-block mt-2 px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">
+    <div class="detail-card">
+      <div class="detail-title-section">
+        <h3 class="detail-title">{{ pollution.titre }}</h3>
+        <span class="detail-type-badge">
           {{ pollution.type_pollution }}
         </span>
       </div>
 
-      <div class="space-y-3">
-        <div>
-          <span class="font-semibold text-gray-700">Description :</span>
-          <p class="mt-1 text-gray-600">{{ pollution.description }}</p>
+      <div class="detail-content">
+        <div class="detail-section">
+          <span class="section-label">Description</span>
+          <p class="description-text">{{ pollution.description }}</p>
         </div>
 
-        <div class="grid grid-cols-2 gap-4">
-          <div>
-            <span class="font-semibold text-gray-700">Date d'observation :</span>
-            <p class="text-gray-600">{{ pollution.date_observation | date: 'dd/MM/yyyy à HH:mm' }}</p>
-          </div>
+        <div class="detail-section">
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="section-label">Date d'observation</span>
+              <p class="section-value">{{ pollution.date_observation | date: 'dd/MM/yyyy à HH:mm' }}</p>
+            </div>
 
-          <div>
-            <span class="font-semibold text-gray-700">Lieu :</span>
-            <p class="text-gray-600">{{ pollution.lieu }}</p>
+            <div class="info-item">
+              <span class="section-label">Lieu</span>
+              <p class="section-value">{{ pollution.lieu }}</p>
+            </div>
           </div>
         </div>
 
-        <div>
-          <span class="font-semibold text-gray-700">Coordonnées GPS :</span>
-          <p class="text-gray-600">
+        <div class="detail-section coordinates-section">
+          <span class="section-label">Coordonnées GPS</span>
+          <p class="coordinates-value">
             Latitude: {{ pollution.latitude }}, Longitude: {{ pollution.longitude }}
           </p>
           <a
             [href]="'https://www.google.com/maps?q=' + pollution.latitude + ',' + pollution.longitude"
             target="_blank"
-            class="text-blue-600 hover:underline text-sm">
+            class="map-link">
             Voir sur Google Maps
           </a>
         </div>
 
         @if (pollution.photo_url) {
-          <div>
-            <span class="font-semibold text-gray-700">Photo :</span>
+          <div class="detail-section detail-image-section">
+            <span class="section-label">Photo</span>
             <img
               [src]="pollution.photo_url"
               [alt]="pollution.titre"
-              class="mt-2 rounded-lg max-w-full h-auto max-h-96 object-cover shadow-md"
+              class="detail-image"
             />
           </div>
         }
       </div>
 
-      <div class="mt-6 flex gap-3 border-t pt-4">
+      <div class="detail-actions">
         <a
           [routerLink]="['/pollutions', pollution.id, 'edit']"
-          class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
-           Modifier
+          class="btn-action btn-edit">
+          Modifier
         </a>
         <button
           (click)="onDelete()"
-          class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition">
+          class="btn-action btn-delete">
           Supprimer
         </button>
       </div>
     </div>
   } @else {
-    <div class="text-center py-8">
-      <p class="text-red-600">Pollution non trouvée</p>
+    <div class="error-state">
+      <p>Pollution non trouvée</p>
     </div>
   }
 </div>

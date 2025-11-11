@@ -1,25 +1,26 @@
-<div>
-  <div>
+<div class="form-container">
+  <div class="form-header">
     <h2>
       {{ isEditMode ? 'Modifier la pollution' : 'Nouvelle pollution' }}
     </h2>
-    <a routerLink="/pollutions">Retour</a>
+    <a routerLink="/pollutions" class="btn-back">← Retour</a>
   </div>
 
   @if (!showRecap) {
     <form
       [formGroup]="pollutionForm"
       (ngSubmit)="onSubmit()"
+      class="pollution-form"
     >
-    <div>
-      <label class="block font-semibold mb-1">Titre :</label>
+    <div class="form-section">
+      <label>Titre :</label>
       <input
         type="text"
         formControlName="titre"
         placeholder="Ex: Décharge sauvage route de..."
       />
       @if (pollutionForm.get('titre')?.invalid && pollutionForm.get('titre')?.touched) {
-      <div class="text-red-600 text-sm mt-1">
+      <div class="error-message">
         @if (pollutionForm.get('titre')?.errors?.['required']) {
         <small>Le titre est requis</small>
         } @if (pollutionForm.get('titre')?.errors?.['minlength']) {
@@ -29,9 +30,9 @@
       }
     </div>
 
-    <div>
-      <label class="block font-semibold mb-1">Type de pollution :</label>
-      <select formControlName="type_pollution" class="input w-full border rounded px-3 py-2">
+    <div class="form-section">
+      <label>Type de pollution :</label>
+      <select formControlName="type_pollution">
         <option value="">-- Sélectionner --</option>
         @for (t of pollutionTypes; track t) {
         <option [value]="t">{{ t }}</option>
@@ -39,20 +40,19 @@
       </select>
       @if (pollutionForm.get('type_pollution')?.invalid &&
       pollutionForm.get('type_pollution')?.touched) {
-      <small class="text-red-600 text-sm mt-1 block">Le type est requis</small>
+      <small class="error-message">Le type est requis</small>
       }
     </div>
 
-    <div>
-      <label class="block font-semibold mb-1">Description :</label>
+    <div class="form-section">
+      <label>Description :</label>
       <textarea
         formControlName="description"
         rows="4"
-        class="input w-full border rounded px-3 py-2"
         placeholder="Décrivez la pollution observée..."
       ></textarea>
       @if (pollutionForm.get('description')?.invalid && pollutionForm.get('description')?.touched) {
-      <div class="text-red-600 text-sm mt-1">
+      <div class="error-message">
         @if (pollutionForm.get('description')?.errors?.['required']) {
         <small>La description est requise</small>
         } @if (pollutionForm.get('description')?.errors?.['minlength']) {
@@ -62,16 +62,15 @@
       }
     </div>
 
-    <div>
-      <label class="block font-semibold mb-1">Date d'observation :</label>
+    <div class="form-section">
+      <label>Date d'observation :</label>
       <input
         type="date"
         formControlName="date_observation"
-        class="input w-full border rounded px-3 py-2"
       />
       @if (pollutionForm.get('date_observation')?.invalid &&
       pollutionForm.get('date_observation')?.touched) {
-      <div class="text-red-600 text-sm mt-1">
+      <div class="error-message">
         @if (pollutionForm.get('date_observation')?.errors?.['required']) {
         <small>La date est requise</small>
         } @if (pollutionForm.get('date_observation')?.errors?.['invalidDate']) {
@@ -85,16 +84,15 @@
       }
     </div>
 
-    <div>
-      <label class="block font-semibold mb-1">Lieu :</label>
+    <div class="form-section">
+      <label>Lieu :</label>
       <input
         type="text"
         formControlName="lieu"
-        class="input w-full border rounded px-3 py-2"
         placeholder="Ex: Parc municipal, Rue..."
       />
       @if (pollutionForm.get('lieu')?.invalid && pollutionForm.get('lieu')?.touched) {
-      <div class="text-red-600 text-sm mt-1">
+      <div class="error-message">
         @if (pollutionForm.get('lieu')?.errors?.['required']) {
         <small>Le lieu est requis</small>
         } @if (pollutionForm.get('lieu')?.errors?.['minlength']) {
@@ -104,18 +102,17 @@
       }
     </div>
 
-    <div class="grid grid-cols-2 gap-4">
-      <div>
-        <label class="block font-semibold mb-1">Latitude :</label>
+    <div class="form-row">
+      <div class="form-section">
+        <label>Latitude :</label>
         <input
           type="number"
           step="0.000001"
           formControlName="latitude"
-          class="input w-full border rounded px-3 py-2"
           placeholder="Ex: 48.8566"
         />
         @if (pollutionForm.get('latitude')?.invalid && pollutionForm.get('latitude')?.touched) {
-        <div class="text-red-600 text-sm mt-1">
+        <div class="error-message">
           @if (pollutionForm.get('latitude')?.errors?.['required']) {
           <small>La latitude est requise</small>
           } @if (pollutionForm.get('latitude')?.errors?.['invalidNumber']) {
@@ -127,17 +124,16 @@
         </div>
         }
       </div>
-      <div>
-        <label class="block font-semibold mb-1">Longitude :</label>
+      <div class="form-section">
+        <label>Longitude :</label>
         <input
           type="number"
           step="0.000001"
           formControlName="longitude"
-          class="input w-full border rounded px-3 py-2"
           placeholder="Ex: 2.3522"
         />
         @if (pollutionForm.get('longitude')?.invalid && pollutionForm.get('longitude')?.touched) {
-        <div class="text-red-600 text-sm mt-1">
+        <div class="error-message">
           @if (pollutionForm.get('longitude')?.errors?.['required']) {
           <small>La longitude est requise</small>
           } @if (pollutionForm.get('longitude')?.errors?.['invalidNumber']) {
@@ -151,16 +147,15 @@
       </div>
     </div>
 
-    <div>
-      <label class="block font-semibold mb-1">Photo (URL) - optionnel :</label>
+    <div class="form-section">
+      <label>Photo (URL) - optionnel :</label>
       <input
         type="text"
         formControlName="photo_url"
-        class="input w-full border rounded px-3 py-2"
         placeholder="https://example.com/photo.jpg"
       />
       @if (pollutionForm.get('photo_url')?.invalid && pollutionForm.get('photo_url')?.touched) {
-      <div class="text-red-600 text-sm mt-1">
+      <div class="error-message">
         @if (pollutionForm.get('photo_url')?.errors?.['pattern']) {
         <small>L'URL doit commencer par http:// ou https://</small>
         }
@@ -171,7 +166,7 @@
       <button
         type="submit"
         [disabled]="pollutionForm.invalid"
-        class="btn-primary w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+        class="btn-submit"
       >
         {{ isEditMode ? 'Enregistrer les modifications' : 'Déclarer la pollution' }}
       </button>
