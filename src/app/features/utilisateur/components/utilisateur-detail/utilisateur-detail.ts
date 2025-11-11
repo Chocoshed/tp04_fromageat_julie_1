@@ -8,7 +8,8 @@ import { CommonModule } from '@angular/common';
   selector: 'app-utilisateur-detail',
   standalone: true,
   imports: [CommonModule, RouterLink],
-  templateUrl: './utilisateur-detail.html'
+  templateUrl: './utilisateur-detail.html',
+  styleUrl: './utilisateur-detail.css'
 })
 export class UtilisateurDetail implements OnInit {
   service = inject(UtilisateurService);

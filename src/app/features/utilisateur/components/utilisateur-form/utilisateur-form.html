@@ -1,41 +1,44 @@
-<div>
-  <h2>{{ isEditMode ? 'Modifier' : 'Créer' }} un utilisateur</h2>
+<div class="form-container">
+  <div class="form-header">
+    <h2>{{ isEditMode ? 'Modifier' : 'Créer' }} un utilisateur</h2>
+    <a routerLink="/utilisateurs" class="btn-back">Retour</a>
+  </div>
 
-  <form [formGroup]="utilisateurForm" (ngSubmit)="onSubmit()">
-    <div>
-      <label for="nom">Nom:</label>
+  <form [formGroup]="utilisateurForm" (ngSubmit)="onSubmit()" class="utilisateur-form">
+    <div class="form-section">
+      <label for="nom">Nom :</label>
       <input type="text" id="nom" formControlName="nom" />
       @if (utilisateurForm.get('nom')?.invalid && utilisateurForm.get('nom')?.touched) {
-        <span>Le nom est requis (min 2 caractères)</span>
+        <span class="error-message">Le nom est requis (min 2 caractères)</span>
       }
     </div>
 
-    <div>
-      <label for="prenom">Prénom:</label>
+    <div class="form-section">
+      <label for="prenom">Prénom :</label>
       <input type="text" id="prenom" formControlName="prenom" />
     </div>
 
-    <div>
-      <label for="login">Login:</label>
+    <div class="form-section">
+      <label for="login">Login :</label>
       <input type="text" id="login" formControlName="login" />
       @if (utilisateurForm.get('login')?.invalid && utilisateurForm.get('login')?.touched) {
-        <span>Le login est requis (min 3 caractères)</span>
+        <span class="error-message">Le login est requis (min 3 caractères)</span>
       }
     </div>
 
-    <div>
-      <label for="pass">Mot de passe:</label>
+    <div class="form-section">
+      <label for="pass">Mot de passe :</label>
       <input type="password" id="pass" formControlName="pass" />
       @if (utilisateurForm.get('pass')?.invalid && utilisateurForm.get('pass')?.touched) {
-        <span>Le mot de passe est requis (min 4 caractères)</span>
+        <span class="error-message">Le mot de passe est requis (min 4 caractères)</span>
       }
     </div>
 
-    <div>
-      <button type="submit" [disabled]="utilisateurForm.invalid">
+    <div class="form-actions">
+      <button type="submit" [disabled]="utilisateurForm.invalid" class="btn-submit">
         {{ isEditMode ? 'Modifier' : 'Créer' }}
       </button>
-      <a routerLink="/utilisateurs">Annuler</a>
+      <a routerLink="/utilisateurs" class="btn-cancel">Annuler</a>
     </div>
   </form>
 </div>

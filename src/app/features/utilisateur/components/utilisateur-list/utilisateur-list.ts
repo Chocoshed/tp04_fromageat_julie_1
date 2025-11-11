@@ -7,7 +7,8 @@ import { AsyncPipe } from '@angular/common';
   selector: 'app-utilisateur-list',
   standalone: true,
   imports: [AsyncPipe, RouterLink],
-  templateUrl: './utilisateur-list.html'
+  templateUrl: './utilisateur-list.html',
+  styleUrl: './utilisateur-list.css'
 })
 export class UtilisateurList {
   service = inject(UtilisateurService);

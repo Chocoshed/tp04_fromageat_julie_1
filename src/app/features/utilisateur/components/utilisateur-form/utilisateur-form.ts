@@ -14,7 +14,8 @@ import { Router, RouterLink, ActivatedRoute } from '@angular/router';
   selector: 'app-utilisateur-form',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterLink],
-  templateUrl: './utilisateur-form.html'
+  templateUrl: './utilisateur-form.html',
+  styleUrl: './utilisateur-form.css'
 })
 export class UtilisateurForm implements OnInit {
   utilisateurForm: FormGroup;

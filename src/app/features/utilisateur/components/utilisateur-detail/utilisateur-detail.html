@@ -1,17 +1,44 @@
-<div>
+<div class="detail-container">
   @if (utilisateur) {
-    <h2>Détail de l'utilisateur</h2>
-    <div>
-      <p><strong>ID:</strong> {{ utilisateur.id }}</p>
-      <p><strong>Nom:</strong> {{ utilisateur.nom }}</p>
-      <p><strong>Prénom:</strong> {{ utilisateur.prenom }}</p>
-      <p><strong>Login:</strong> {{ utilisateur.login }}</p>
+    <div class="detail-header">
+      <h2>Détail de l'utilisateur</h2>
     </div>
-    <div>
-      <a routerLink="/utilisateurs/{{utilisateur.id}}/edit">Modifier</a>
-      <a routerLink="/utilisateurs">Retour à la liste</a>
+
+    <div class="detail-card">
+      <div class="detail-content">
+        <div class="detail-field">
+          <span class="detail-label">ID :</span>
+          <span class="detail-value">{{ utilisateur.id }}</span>
+        </div>
+
+        <div class="detail-field">
+          <span class="detail-label">Nom :</span>
+          <span class="detail-value">{{ utilisateur.nom }}</span>
+        </div>
+
+        <div class="detail-field">
+          <span class="detail-label">Prénom :</span>
+          <span class="detail-value">{{ utilisateur.prenom }}</span>
+        </div>
+
+        <div class="detail-field">
+          <span class="detail-label">Login :</span>
+          <span class="detail-value">{{ utilisateur.login }}</span>
+        </div>
+      </div>
+
+      <div class="detail-actions">
+        <a routerLink="/utilisateurs/{{utilisateur.id}}/edit" class="btn-edit">
+          Modifier
+        </a>
+        <a routerLink="/utilisateurs" class="btn-back">
+          Retour à la liste
+        </a>
+      </div>
     </div>
   } @else {
-    <p>Chargement...</p>
+    <div class="loading-state">
+      <p>Chargement...</p>
+    </div>
   }
 </div>

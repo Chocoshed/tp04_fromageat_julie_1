@@ -1,19 +1,34 @@
-<div>
-  <h2>Liste des utilisateurs</h2>
-  <a routerLink="/utilisateurs/create">Nouvel utilisateur</a>
+<div class="list-container">
+  <div class="list-header">
+    <h2>Liste des utilisateurs</h2>
+    <a routerLink="/utilisateurs/create" class="btn-new">
+      + Nouvel utilisateur
+    </a>
+  </div>
 
-  <div>
+  <div class="utilisateur-grid">
     @for (utilisateur of utilisateurs$|async; track utilisateur.id) {
-      <div>
+      <div class="utilisateur-card">
         <h3>{{ utilisateur.nom }} {{ utilisateur.prenom }}</h3>
-        <p><strong>ID:</strong> {{ utilisateur.id }}</p>
-        <p><strong>Login:</strong> {{ utilisateur.login }}</p>
+        <p class="utilisateur-info"><strong>ID:</strong> {{ utilisateur.id }}</p>
+        <p class="utilisateur-info"><strong>Login:</strong> {{ utilisateur.login }}</p>
 
-        <div>
-          <a routerLink="/utilisateurs/{{utilisateur.id}}">Voir détail</a>
-          <a routerLink="/utilisateurs/{{utilisateur.id}}/edit">Modifier</a>
-          <button (click)="onDelete(utilisateur.id)">Supprimer</button>
+        <div class="card-actions">
+          <a routerLink="/utilisateurs/{{utilisateur.id}}" class="btn-action btn-view">
+            Voir
+          </a>
+          <a routerLink="/utilisateurs/{{utilisateur.id}}/edit" class="btn-action btn-edit">
+            Modifier
+          </a>
+          <button (click)="onDelete(utilisateur.id)" class="btn-action btn-delete">
+            Supprimer
+          </button>
         </div>
+      </div>
+    } @empty {
+      <div class="empty-state">
+        <h3>Aucun utilisateur enregistré</h3>
+        <p>Commencez par créer un utilisateur</p>
       </div>
     }
   </div>
