@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 import { PollutionComponent } from './features/pollution/pages/pollution/pollution';
 import { PollutionList } from './features/pollution/components/pollution-list/pollution-list';
 import { PollutionForm } from './features/pollution/components/pollution-form/pollution-form';
-import { PollutionRecap } from './features/pollution/components/pollution-recap/pollution-recap';
+import { PollutionDetail } from './features/pollution/components/pollution-detail/pollution-detail';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'pollutions', pathMatch: 'full' },
@@ -24,7 +24,7 @@ export const routes: Routes = [
       },
       {
         path: ':id',
-        component: PollutionRecap,
+        component: PollutionDetail,
       },
     ],
   },

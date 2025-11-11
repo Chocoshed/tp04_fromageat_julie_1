@@ -18,6 +18,10 @@
         }
 
         <div class="mt-4 flex gap-2">
+          <a routerLink="/pollutions/{{pollution.id}}"
+             class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition">
+            👁️ Voir détail
+          </a>
           <a routerLink="/pollutions/{{pollution.id}}/edit"
              class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
             ✏️ Modifier
