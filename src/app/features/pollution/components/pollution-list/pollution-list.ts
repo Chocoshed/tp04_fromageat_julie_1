@@ -21,6 +21,8 @@ export class PollutionList {
       this.service.delete(id).subscribe({
         next: () => {
           console.log('Pollution supprimée avec succès');
+          // Rafraîchir la liste des pollutions après suppression
+          this.pollutions$ = this.service.getAll();
         },
         error: (err) => {
           console.error('Erreur lors de la suppression:', err);

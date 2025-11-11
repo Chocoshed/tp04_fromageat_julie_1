@@ -27,11 +27,6 @@
   gap: 0.5rem;
 }
 
-.list-header h2::before {
-  content: "🌿";
-  font-size: 2rem;
-}
-
 .btn-new {
   background: linear-gradient(135deg, var(--primary-green), var(--accent-light));
   color: white;
