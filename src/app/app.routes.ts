@@ -28,4 +28,9 @@ export const routes: Routes = [
       },
     ],
   },
+  {
+    path: 'utilisateurs',
+    loadChildren: () =>
+      import('./features/utilisateur/routes').then((m) => m.utilisateurRoutes),
+  },
 ];

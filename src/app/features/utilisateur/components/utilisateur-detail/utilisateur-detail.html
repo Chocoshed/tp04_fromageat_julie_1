@@ -1,0 +1,17 @@
+<div>
+  @if (utilisateur) {
+    <h2>Détail de l'utilisateur</h2>
+    <div>
+      <p><strong>ID:</strong> {{ utilisateur.id }}</p>
+      <p><strong>Nom:</strong> {{ utilisateur.nom }}</p>
+      <p><strong>Prénom:</strong> {{ utilisateur.prenom }}</p>
+      <p><strong>Login:</strong> {{ utilisateur.login }}</p>
+    </div>
+    <div>
+      <a routerLink="/utilisateurs/{{utilisateur.id}}/edit">Modifier</a>
+      <a routerLink="/utilisateurs">Retour à la liste</a>
+    </div>
+  } @else {
+    <p>Chargement...</p>
+  }
+</div>

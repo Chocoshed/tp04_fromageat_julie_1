@@ -1,0 +1,20 @@
+<div>
+  <h2>Liste des utilisateurs</h2>
+  <a routerLink="/utilisateurs/create">+ Nouvel utilisateur</a>
+
+  <div>
+    @for (utilisateur of utilisateurs$|async; track utilisateur.id) {
+      <div>
+        <h3>{{ utilisateur.nom }} {{ utilisateur.prenom }}</h3>
+        <p><strong>ID:</strong> {{ utilisateur.id }}</p>
+        <p><strong>Login:</strong> {{ utilisateur.login }}</p>
+
+        <div>
+          <a routerLink="/utilisateurs/{{utilisateur.id}}">Voir détail</a>
+          <a routerLink="/utilisateurs/{{utilisateur.id}}/edit">Modifier</a>
+          <button (click)="onDelete(utilisateur.id)">Supprimer</button>
+        </div>
+      </div>
+    }
+  </div>
+</div>

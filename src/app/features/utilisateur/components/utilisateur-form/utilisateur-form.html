@@ -1,0 +1,49 @@
+<div>
+  <h2>{{ isEditMode ? 'Modifier' : 'Créer' }} un utilisateur</h2>
+
+  <form [formGroup]="utilisateurForm" (ngSubmit)="onSubmit()">
+    <div>
+      <label for="id">ID:</label>
+      <input type="text" id="id" formControlName="id" />
+      @if (utilisateurForm.get('id')?.invalid && utilisateurForm.get('id')?.touched) {
+        <span>L'ID est requis (min 3 caractères)</span>
+      }
+    </div>
+
+    <div>
+      <label for="nom">Nom:</label>
+      <input type="text" id="nom" formControlName="nom" />
+      @if (utilisateurForm.get('nom')?.invalid && utilisateurForm.get('nom')?.touched) {
+        <span>Le nom est requis (min 2 caractères)</span>
+      }
+    </div>
+
+    <div>
+      <label for="prenom">Prénom:</label>
+      <input type="text" id="prenom" formControlName="prenom" />
+    </div>
+
+    <div>
+      <label for="login">Login:</label>
+      <input type="text" id="login" formControlName="login" />
+      @if (utilisateurForm.get('login')?.invalid && utilisateurForm.get('login')?.touched) {
+        <span>Le login est requis (min 3 caractères)</span>
+      }
+    </div>
+
+    <div>
+      <label for="pass">Mot de passe:</label>
+      <input type="password" id="pass" formControlName="pass" />
+      @if (utilisateurForm.get('pass')?.invalid && utilisateurForm.get('pass')?.touched) {
+        <span>Le mot de passe est requis (min 4 caractères)</span>
+      }
+    </div>
+
+    <div>
+      <button type="submit" [disabled]="utilisateurForm.invalid">
+        {{ isEditMode ? 'Modifier' : 'Créer' }}
+      </button>
+      <a routerLink="/utilisateurs">Annuler</a>
+    </div>
+  </form>
+</div>
