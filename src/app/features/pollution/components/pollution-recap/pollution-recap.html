@@ -1,0 +1,56 @@
+<div class="bg-white shadow-md rounded-lg p-6 space-y-4">
+  <h3 class="text-xl font-bold text-green-600 mb-4">✓ Déclaration enregistrée</h3>
+
+  @if (pollution) {
+    <div class="space-y-3">
+      <div>
+        <span class="font-semibold">Titre :</span>
+        <span class="ml-2">{{ pollution.titre }}</span>
+      </div>
+
+      <div>
+        <span class="font-semibold">Type de pollution :</span>
+        <span class="ml-2 px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
+          {{ pollution.type_pollution }}
+        </span>
+      </div>
+
+      <div>
+        <span class="font-semibold">Description :</span>
+        <p class="mt-1 text-gray-700">{{ pollution.description }}</p>
+      </div>
+
+      <div>
+        <span class="font-semibold">Date d'observation :</span>
+        <span class="ml-2">{{ pollution.date_observation | date: 'dd/MM/yyyy' }}</span>
+      </div>
+
+      <div>
+        <span class="font-semibold">Lieu :</span>
+        <span class="ml-2">{{ pollution.lieu }}</span>
+      </div>
+
+      <div>
+        <span class="font-semibold">Coordonnées :</span>
+        <span class="ml-2">{{ pollution.latitude }}, {{ pollution.longitude }}</span>
+      </div>
+
+      @if (pollution.photo_url) {
+        <div>
+          <span class="font-semibold">Photo :</span>
+          <img [src]="pollution.photo_url" [alt]="pollution.titre"
+               class="mt-2 rounded-lg max-w-full h-auto max-h-64 object-cover" />
+        </div>
+      }
+    </div>
+
+    <div class="mt-6 flex gap-4">
+      <button (click)="onNewDeclaration()" class="btn-primary">
+        Nouvelle déclaration
+      </button>
+      <button (click)="onViewList()" class="btn-secondary">
+        Voir la liste
+      </button>
+    </div>
+  }
+</div>

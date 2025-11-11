@@ -1,0 +1,152 @@
+<div>
+    <h2>Liste des pollutions</h2>
+    <a routerLink="/pollutions" > Retour
+    </a>
+  </div>
+
+<form [formGroup]="pollutionForm" (ngSubmit)="onSubmit()" class="space-y-4 p-4 bg-white shadow-md rounded-lg">
+  <div>
+    <label class="block font-semibold mb-1">Titre :</label>
+    <input type="text" formControlName="titre" class="input w-full border rounded px-3 py-2"
+           placeholder="Ex: Décharge sauvage route de..." />
+    @if (pollutionForm.get('titre')?.invalid && pollutionForm.get('titre')?.touched) {
+      <div class="text-red-600 text-sm mt-1">
+        @if (pollutionForm.get('titre')?.errors?.['required']) {
+          <small>Le titre est requis</small>
+        }
+        @if (pollutionForm.get('titre')?.errors?.['minlength']) {
+          <small>Le titre doit contenir au moins 3 caractères</small>
+        }
+      </div>
+    }
+  </div>
+
+  <div>
+    <label class="block font-semibold mb-1">Type de pollution :</label>
+    <select formControlName="type_pollution" class="input w-full border rounded px-3 py-2">
+      <option value="">-- Sélectionner --</option>
+      @for (t of pollutionTypes; track t) {
+        <option [value]="t">{{ t }}</option>
+      }
+    </select>
+    @if (pollutionForm.get('type_pollution')?.invalid && pollutionForm.get('type_pollution')?.touched) {
+      <small class="text-red-600 text-sm mt-1 block">Le type est requis</small>
+    }
+  </div>
+
+  <div>
+    <label class="block font-semibold mb-1">Description :</label>
+    <textarea formControlName="description" rows="4"
+              class="input w-full border rounded px-3 py-2"
+              placeholder="Décrivez la pollution observée..."></textarea>
+    @if (pollutionForm.get('description')?.invalid && pollutionForm.get('description')?.touched) {
+      <div class="text-red-600 text-sm mt-1">
+        @if (pollutionForm.get('description')?.errors?.['required']) {
+          <small>La description est requise</small>
+        }
+        @if (pollutionForm.get('description')?.errors?.['minlength']) {
+          <small>La description doit contenir au moins 10 caractères</small>
+        }
+      </div>
+    }
+  </div>
+
+  <div>
+    <label class="block font-semibold mb-1">Date d'observation :</label>
+    <input type="date" formControlName="date_observation"
+           class="input w-full border rounded px-3 py-2" />
+    @if (pollutionForm.get('date_observation')?.invalid && pollutionForm.get('date_observation')?.touched) {
+      <div class="text-red-600 text-sm mt-1">
+        @if (pollutionForm.get('date_observation')?.errors?.['required']) {
+          <small>La date est requise</small>
+        }
+        @if (pollutionForm.get('date_observation')?.errors?.['invalidDate']) {
+          <small>La date n'est pas valide</small>
+        }
+        @if (pollutionForm.get('date_observation')?.errors?.['futureDate']) {
+          <small>La date ne peut pas être dans le futur</small>
+        }
+        @if (pollutionForm.get('date_observation')?.errors?.['tooOldDate']) {
+          <small>La date ne peut pas remonter à plus de 10 ans</small>
+        }
+      </div>
+    }
+  </div>
+
+  <div>
+    <label class="block font-semibold mb-1">Lieu :</label>
+    <input type="text" formControlName="lieu"
+           class="input w-full border rounded px-3 py-2"
+           placeholder="Ex: Parc municipal, Rue..." />
+    @if (pollutionForm.get('lieu')?.invalid && pollutionForm.get('lieu')?.touched) {
+      <div class="text-red-600 text-sm mt-1">
+        @if (pollutionForm.get('lieu')?.errors?.['required']) {
+          <small>Le lieu est requis</small>
+        }
+        @if (pollutionForm.get('lieu')?.errors?.['minlength']) {
+          <small>Le lieu doit contenir au moins 3 caractères</small>
+        }
+      </div>
+    }
+  </div>
+
+  <div class="grid grid-cols-2 gap-4">
+    <div>
+      <label class="block font-semibold mb-1">Latitude :</label>
+      <input type="number" step="0.000001" formControlName="latitude"
+             class="input w-full border rounded px-3 py-2"
+             placeholder="Ex: 48.8566" />
+      @if (pollutionForm.get('latitude')?.invalid && pollutionForm.get('latitude')?.touched) {
+        <div class="text-red-600 text-sm mt-1">
+          @if (pollutionForm.get('latitude')?.errors?.['required']) {
+            <small>La latitude est requise</small>
+          }
+          @if (pollutionForm.get('latitude')?.errors?.['invalidNumber']) {
+            <small>Doit être un nombre valide</small>
+          }
+          @if (pollutionForm.get('latitude')?.errors?.['min'] || pollutionForm.get('latitude')?.errors?.['max']) {
+            <small>Doit être entre -90 et 90</small>
+          }
+        </div>
+      }
+    </div>
+    <div>
+      <label class="block font-semibold mb-1">Longitude :</label>
+      <input type="number" step="0.000001" formControlName="longitude"
+             class="input w-full border rounded px-3 py-2"
+             placeholder="Ex: 2.3522" />
+      @if (pollutionForm.get('longitude')?.invalid && pollutionForm.get('longitude')?.touched) {
+        <div class="text-red-600 text-sm mt-1">
+          @if (pollutionForm.get('longitude')?.errors?.['required']) {
+            <small>La longitude est requise</small>
+          }
+          @if (pollutionForm.get('longitude')?.errors?.['invalidNumber']) {
+            <small>Doit être un nombre valide</small>
+          }
+          @if (pollutionForm.get('longitude')?.errors?.['min'] || pollutionForm.get('longitude')?.errors?.['max']) {
+            <small>Doit être entre -180 et 180</small>
+          }
+        </div>
+      }
+    </div>
+  </div>
+
+  <div>
+    <label class="block font-semibold mb-1">Photo (URL) - optionnel :</label>
+    <input type="text" formControlName="photo_url"
+           class="input w-full border rounded px-3 py-2"
+           placeholder="https://example.com/photo.jpg" />
+    @if (pollutionForm.get('photo_url')?.invalid && pollutionForm.get('photo_url')?.touched) {
+      <div class="text-red-600 text-sm mt-1">
+        @if (pollutionForm.get('photo_url')?.errors?.['pattern']) {
+          <small>L'URL doit commencer par http:// ou https://</small>
+        }
+      </div>
+    }
+  </div>
+
+  <button type="submit" [disabled]="pollutionForm.invalid"
+          class="btn-primary w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed">
+    Déclarer la pollution
+  </button>
+</form>

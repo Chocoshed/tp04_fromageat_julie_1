@@ -1,0 +1,22 @@
+<div>
+  <div>
+    <h2>Liste des pollutions</h2>
+    <a routerLink="/pollutions/create" > + Nouvelle pollution
+    </a>
+  </div>
+
+  <div>
+    @for (pollution of service.getAll()|async; track $index) {
+      <div>
+        <h3>{{ pollution.titre }} (ID: {{ pollution.id }})</h3>
+        <p><strong>Type:</strong> {{ pollution.type_pollution }}</p>
+        <p><strong>Description:</strong> {{ pollution.description }}</p>
+        <p><strong>Date:</strong> {{ pollution.date_observation | date:'medium' }}</p>
+        <p><strong>Lieu:</strong> {{ pollution.lieu }} — coords: {{ pollution.latitude }}, {{ pollution.longitude }}</p>
+        @if (pollution.photo_url) {
+          <img [src]="pollution.photo_url" alt="{{ pollution.titre }}" />
+        }
+      </div>
+    }
+  </div>
+</div>
