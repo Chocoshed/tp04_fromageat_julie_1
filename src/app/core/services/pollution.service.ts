@@ -1,58 +1,32 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { Pollution } from '../models/pollution.model';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({ providedIn: 'root' })
 export class PollutionService {
   private _pollutions = new BehaviorSubject<Pollution[]>([]);
   pollutions$ = this._pollutions.asObservable();
 
-  private data: Pollution[] = [
-    {
-      id: 1,
-      titre: 'Pollution plastique plage',
-      type_pollution: 'Plastique',
-      description: 'Nombreux déchets retrouvés sur la plage',
-      date_observation: new Date(),
-      lieu: 'Nice',
-      latitude: 43.7,
-      longitude: 7.26,
-      photo_url: ''
-    }
-  ];
-
-  constructor() {
-    this._pollutions.next(this.data);
-  }
+  constructor(private http: HttpClient, @Inject('API_URL') private apiUrl: string) {}
 
   getAll(): Observable<Pollution[]> {
-    return this.pollutions$;
+    return this.http.get<Pollution[]>(`${this.apiUrl}/pollution`);
   }
 
-  getById(id: number): Observable<Pollution | undefined> {
-    return of(this.data.find(p => p.id === id));
+  getById(id: number): Observable<Pollution> {
+    return this.http.get<Pollution>(`${this.apiUrl}/pollution/${id}`);
   }
 
   create(p: Pollution): Observable<Pollution> {
-    const newPollution = { ...p, id: Date.now() };
-    this.data.push(newPollution);
-    this._pollutions.next(this.data);
-    return of(newPollution);
+    return this.http.post<Pollution>(`${this.apiUrl}/pollution`, p);
   }
 
   update(id: number, p: Pollution): Observable<Pollution> {
-    const index = this.data.findIndex(x => x.id === id);
-    if (index !== -1) {
-      this.data[index] = { ...p, id };
-      this._pollutions.next(this.data);
-      return of(this.data[index]);
-    }
-    throw new Error('Pollution non trouvée');
+    return this.http.put<Pollution>(`${this.apiUrl}/pollution/${id}`, p);
   }
 
   delete(id: number): Observable<void> {
-    this.data = this.data.filter(p => p.id !== id);
-    this._pollutions.next(this.data);
-    return of(void 0);
+    return this.http.delete<void>(`${this.apiUrl}/pollution/${id}`);
   }
 }

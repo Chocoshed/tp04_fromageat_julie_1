@@ -11,6 +11,7 @@ import { AsyncPipe, DatePipe } from '@angular/common';
 })
 export class PollutionList {
   service = inject(PollutionService);
+  pollutions$ = this.service.getAll();
 
   onDelete(id: number | undefined) {
     if (!id) return;
