@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, inject, Output } from '@angular/core';
+import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Pollution } from '../../../../core/models/pollution.model';
 import { PollutionService } from '../../../../core/services/pollution.service';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-pollution-form',
@@ -12,11 +12,15 @@ import { Router, RouterLink } from '@angular/router';
   templateUrl: './pollution-form.html',
   styleUrl: './pollution-form.css'
 })
-export class PollutionForm {
+export class PollutionForm implements OnInit {
   @Output() pollutionSubmitted = new EventEmitter<Pollution>();
   pollutionForm: FormGroup;
   service = inject(PollutionService);
-  rooter = inject(Router);
+  router = inject(Router);
+  route = inject(ActivatedRoute);
+
+  isEditMode = false;
+  pollutionId?: number;
 
   pollutionTypes = [
     'Plastique',
@@ -44,6 +48,40 @@ export class PollutionForm {
       ],
       photo_url: ['', [Validators.pattern('https?://.+')]]
     });
+  }
+
+  ngOnInit() {
+    // Récupérer l'ID depuis l'URL
+    const id = this.route.snapshot.paramMap.get('id');
+
+    if (id) {
+      this.isEditMode = true;
+      this.pollutionId = +id; // Convertir en nombre
+
+      // Charger les données de la pollution
+      this.service.getById(this.pollutionId).subscribe(pollution => {
+        if (pollution) {
+          // Formater la date pour l'input type="date"
+          let dateValue = '';
+          if (pollution.date_observation) {
+            const date = new Date(pollution.date_observation);
+            dateValue = date.toISOString().split('T')[0];
+          }
+
+          // Remplir le formulaire avec les données existantes
+          this.pollutionForm.patchValue({
+            titre: pollution.titre,
+            type_pollution: pollution.type_pollution,
+            description: pollution.description,
+            date_observation: dateValue,
+            lieu: pollution.lieu,
+            latitude: pollution.latitude,
+            longitude: pollution.longitude,
+            photo_url: pollution.photo_url || ''
+          });
+        }
+      });
+    }
   }
 
   // Validateur personnalisé pour vérifier que c'est un nombre valide
@@ -89,10 +127,19 @@ export class PollutionForm {
   onSubmit() {
     if (this.pollutionForm.valid) {
       const pollution = this.pollutionForm.value as Pollution;
-      this.service.create(pollution);
-      this.service.getAll();
-      this.pollutionForm.reset();
-      this.rooter.navigate(['pollutions']);
+
+      if (this.isEditMode && this.pollutionId) {
+        // Mode édition
+        this.service.update(this.pollutionId, pollution).subscribe(() => {
+          this.router.navigate(['/pollutions']);
+        });
+      } else {
+        // Mode création
+        this.service.create(pollution).subscribe(() => {
+          this.pollutionForm.reset();
+          this.router.navigate(['/pollutions']);
+        });
+      }
     } else {
       this.pollutionForm.markAllAsTouched();
     }

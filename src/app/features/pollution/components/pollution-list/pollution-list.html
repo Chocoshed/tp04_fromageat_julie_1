@@ -16,6 +16,7 @@
         @if (pollution.photo_url) {
           <img [src]="pollution.photo_url" alt="{{ pollution.titre }}" />
         }
+        <a routerLink="/pollutions/{{pollution.id}}/edit">Modifier</a>
       </div>
     }
   </div>
