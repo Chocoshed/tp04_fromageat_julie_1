@@ -6,10 +6,11 @@
     <a routerLink="/pollutions">Retour</a>
   </div>
 
-  <form
-    [formGroup]="pollutionForm"
-    (ngSubmit)="onSubmit()"
-  >
+  @if (!showRecap) {
+    <form
+      [formGroup]="pollutionForm"
+      (ngSubmit)="onSubmit()"
+    >
     <div>
       <label class="block font-semibold mb-1">Titre :</label>
       <input
@@ -167,12 +168,19 @@
       }
     </div>
 
-    <button
-      type="submit"
-      [disabled]="pollutionForm.invalid"
-      class="btn-primary w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
-    >
-      {{ isEditMode ? 'Enregistrer les modifications' : 'Déclarer la pollution' }}
-    </button>
-  </form>
+      <button
+        type="submit"
+        [disabled]="pollutionForm.invalid"
+        class="btn-primary w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+      >
+        {{ isEditMode ? 'Enregistrer les modifications' : 'Déclarer la pollution' }}
+      </button>
+    </form>
+  } @else {
+    <app-pollution-recap
+      [pollution]="submittedPollution"
+      (newDeclaration)="onNewDeclaration()"
+      (viewList)="onViewList()">
+    </app-pollution-recap>
+  }
 </div>

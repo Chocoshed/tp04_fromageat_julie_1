@@ -1,11 +1,12 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Pollution } from '../../../../core/models/pollution.model';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-pollution-recap',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './pollution-recap.html',
   styleUrl: './pollution-recap.css'
 })

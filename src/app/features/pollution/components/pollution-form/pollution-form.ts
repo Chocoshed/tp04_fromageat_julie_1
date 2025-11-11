@@ -1,16 +1,24 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+  AbstractControl,
+  ValidationErrors,
+} from '@angular/forms';
 import { Pollution } from '../../../../core/models/pollution.model';
 import { PollutionService } from '../../../../core/services/pollution.service';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
+import { PollutionRecap } from '../pollution-recap/pollution-recap';
 
 @Component({
   selector: 'app-pollution-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, PollutionRecap],
   templateUrl: './pollution-form.html',
-  styleUrl: './pollution-form.css'
+  styleUrl: './pollution-form.css',
 })
 export class PollutionForm implements OnInit {
   @Output() pollutionSubmitted = new EventEmitter<Pollution>();
@@ -21,15 +29,10 @@ export class PollutionForm implements OnInit {
 
   isEditMode = false;
   pollutionId?: number;
+  showRecap = false;
+  submittedPollution?: Pollution;
 
-  pollutionTypes = [
-    'Plastique',
-    'Chimique',
-    'Dépôt sauvage',
-    'Eau',
-    'Air',
-    'Autre'
-  ];
+  pollutionTypes = ['Plastique', 'Chimique', 'Dépôt sauvage', 'Eau', 'Air', 'Autre'];
 
   constructor(private fb: FormBuilder) {
     this.pollutionForm = this.fb.group({
@@ -40,13 +43,13 @@ export class PollutionForm implements OnInit {
       lieu: ['', [Validators.required, Validators.minLength(3)]],
       latitude: [
         '',
-        [Validators.required, Validators.min(-90), Validators.max(90), this.numberValidator]
+        [Validators.required, Validators.min(-90), Validators.max(90), this.numberValidator],
       ],
       longitude: [
         '',
-        [Validators.required, Validators.min(-180), Validators.max(180), this.numberValidator]
+        [Validators.required, Validators.min(-180), Validators.max(180), this.numberValidator],
       ],
-      photo_url: ['', [Validators.pattern('https?://.+')]]
+      photo_url: ['', [Validators.pattern('https?://.+')]],
     });
   }
 
@@ -59,7 +62,7 @@ export class PollutionForm implements OnInit {
       this.pollutionId = +id; // Convertir en nombre
 
       // Charger les données de la pollution
-      this.service.getById(this.pollutionId).subscribe(pollution => {
+      this.service.getById(this.pollutionId).subscribe((pollution) => {
         if (pollution) {
           // Formater la date pour l'input type="date"
           let dateValue = '';
@@ -77,7 +80,7 @@ export class PollutionForm implements OnInit {
             lieu: pollution.lieu,
             latitude: pollution.latitude,
             longitude: pollution.longitude,
-            photo_url: pollution.photo_url || ''
+            photo_url: pollution.photo_url || '',
           });
         }
       });
@@ -130,18 +133,31 @@ export class PollutionForm implements OnInit {
 
       if (this.isEditMode && this.pollutionId) {
         // Mode édition
-        this.service.update(this.pollutionId, pollution).subscribe(() => {
-          this.router.navigate(['/pollutions']);
+        this.service.update(this.pollutionId, pollution).subscribe((createdPollution) => {
+          this.submittedPollution = createdPollution;
+          this.showRecap = true;
         });
       } else {
         // Mode création
-        this.service.create(pollution).subscribe(() => {
-          this.pollutionForm.reset();
-          this.router.navigate(['/pollutions']);
+        this.service.create(pollution).subscribe((createdPollution) => {
+          this.submittedPollution = createdPollution;
+          this.showRecap = true;
         });
       }
     } else {
       this.pollutionForm.markAllAsTouched();
     }
+  }
+
+  onNewDeclaration() {
+    // Réinitialiser pour afficher à nouveau le formulaire
+    this.showRecap = false;
+    this.submittedPollution = undefined;
+    this.pollutionForm.reset();
+  }
+
+  onViewList() {
+    // Naviguer vers la liste
+    this.router.navigate(['/pollutions']);
   }
 }
