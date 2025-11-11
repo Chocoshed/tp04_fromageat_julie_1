@@ -5,18 +5,28 @@
     </a>
   </div>
 
-  <div>
+  <div class="grid gap-4">
     @for (pollution of service.getAll()|async; track $index) {
-      <div>
-        <h3>{{ pollution.titre }} (ID: {{ pollution.id }})</h3>
-        <p><strong>Type:</strong> {{ pollution.type_pollution }}</p>
+      <div class="bg-white shadow-md rounded-lg p-4">
+        <h3 class="text-xl font-semibold mb-2">{{ pollution.titre }} (ID: {{ pollution.id }})</h3>
+        <p><strong>Type:</strong> <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded text-sm">{{ pollution.type_pollution }}</span></p>
         <p><strong>Description:</strong> {{ pollution.description }}</p>
         <p><strong>Date:</strong> {{ pollution.date_observation | date:'medium' }}</p>
         <p><strong>Lieu:</strong> {{ pollution.lieu }} — coords: {{ pollution.latitude }}, {{ pollution.longitude }}</p>
         @if (pollution.photo_url) {
-          <img [src]="pollution.photo_url" alt="{{ pollution.titre }}" />
+          <img [src]="pollution.photo_url" alt="{{ pollution.titre }}" class="mt-2 rounded max-h-48 object-cover" />
         }
-        <a routerLink="/pollutions/{{pollution.id}}/edit">Modifier</a>
+
+        <div class="mt-4 flex gap-2">
+          <a routerLink="/pollutions/{{pollution.id}}/edit"
+             class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+            ✏️ Modifier
+          </a>
+          <button (click)="onDelete(pollution.id)"
+                  class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition">
+            🗑️ Supprimer
+          </button>
+        </div>
       </div>
     }
   </div>

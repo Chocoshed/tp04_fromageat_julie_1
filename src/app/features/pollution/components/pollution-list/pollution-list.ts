@@ -12,4 +12,20 @@ import { AsyncPipe, DatePipe } from '@angular/common';
 export class PollutionList {
   service = inject(PollutionService);
 
+  onDelete(id: number | undefined) {
+    if (!id) return;
+
+    // Demander confirmation avant de supprimer
+    if (confirm('Êtes-vous sûr de vouloir supprimer cette pollution ?')) {
+      this.service.delete(id).subscribe({
+        next: () => {
+          console.log('Pollution supprimée avec succès');
+        },
+        error: (err) => {
+          console.error('Erreur lors de la suppression:', err);
+          alert('Erreur lors de la suppression de la pollution');
+        }
+      });
+    }
+  }
 }
