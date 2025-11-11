@@ -27,7 +27,6 @@ export class UtilisateurForm implements OnInit {
 
   constructor(private fb: FormBuilder) {
     this.utilisateurForm = this.fb.group({
-      id: ['', [Validators.required, Validators.minLength(3)]],
       nom: ['', [Validators.required, Validators.minLength(2)]],
       prenom: [''],
       login: ['', [Validators.required, Validators.minLength(3)]],
@@ -42,13 +41,9 @@ export class UtilisateurForm implements OnInit {
       this.isEditMode = true;
       this.utilisateurId = id;
 
-      // Désactiver le champ ID en mode édition
-      this.utilisateurForm.get('id')?.disable();
-
       this.service.getById(this.utilisateurId).subscribe((utilisateur) => {
         if (utilisateur) {
           this.utilisateurForm.patchValue({
-            id: utilisateur.id,
             nom: utilisateur.nom,
             prenom: utilisateur.prenom || '',
             login: utilisateur.login,
@@ -61,7 +56,7 @@ export class UtilisateurForm implements OnInit {
 
   onSubmit() {
     if (this.utilisateurForm.valid) {
-      const utilisateur = this.utilisateurForm.getRawValue() as Utilisateur;
+      const utilisateur = this.utilisateurForm.value as Utilisateur;
 
       if (this.isEditMode && this.utilisateurId) {
         this.service.update(this.utilisateurId, utilisateur).subscribe({
@@ -75,6 +70,7 @@ export class UtilisateurForm implements OnInit {
           }
         });
       } else {
+        // Mode création - l'API générera l'ID automatiquement
         this.service.create(utilisateur).subscribe({
           next: () => {
             alert('Utilisateur créé avec succès');
