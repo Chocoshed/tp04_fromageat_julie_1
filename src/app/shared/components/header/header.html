@@ -2,7 +2,18 @@
   <nav>
     <ul>
       <li><a routerLink="/pollutions" routerLinkActive="active">Pollutions</a></li>
-      <li><a routerLink="/utilisateurs" routerLinkActive="active">Utilisateurs</a></li>
+      @if (isAuthenticated$ | async) {
+        <li><a routerLink="/utilisateurs" routerLinkActive="active">Utilisateurs</a></li>
+      }
     </ul>
+    <div class="auth-section">
+      @if (isAuthenticated$ | async) {
+        <span class="user-name">Bonjour, {{ (currentUser$ | async)?.nom }}</span>
+        <button (click)="logout()" class="btn-logout">Déconnexion</button>
+      } @else {
+        <a routerLink="/login" class="btn-login">Connexion</a>
+        <a routerLink="/register" class="btn-register">Inscription</a>
+      }
+    </div>
   </nav>
 </header>

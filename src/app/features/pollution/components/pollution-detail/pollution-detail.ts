@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { PollutionService } from '../../../../core/services/pollution.service';
+import { AuthService } from '../../../../core/services/auth.service';
 import { Pollution } from '../../../../core/models/pollution.model';
 
 @Component({
@@ -13,11 +14,13 @@ import { Pollution } from '../../../../core/models/pollution.model';
 })
 export class PollutionDetail implements OnInit {
   service = inject(PollutionService);
+  authService = inject(AuthService);
   route = inject(ActivatedRoute);
   router = inject(Router);
 
   pollution?: Pollution;
   isLoading = true;
+  isAuthenticated$ = this.authService.isAuthenticated$;
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');

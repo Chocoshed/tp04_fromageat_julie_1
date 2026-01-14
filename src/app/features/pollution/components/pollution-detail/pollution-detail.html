@@ -63,18 +63,20 @@
         }
       </div>
 
-      <div class="detail-actions">
-        <a
-          [routerLink]="['/pollutions', pollution.id, 'edit']"
-          class="btn-action btn-edit">
-          Modifier
-        </a>
-        <button
-          (click)="onDelete()"
-          class="btn-action btn-delete">
-          Supprimer
-        </button>
-      </div>
+      @if (isAuthenticated$ | async) {
+        <div class="detail-actions">
+          <a
+            [routerLink]="['/pollutions', pollution.id, 'edit']"
+            class="btn-action btn-edit">
+            Modifier
+          </a>
+          <button
+            (click)="onDelete()"
+            class="btn-action btn-delete">
+            Supprimer
+          </button>
+        </div>
+      }
     </div>
   } @else {
     <div class="error-state">

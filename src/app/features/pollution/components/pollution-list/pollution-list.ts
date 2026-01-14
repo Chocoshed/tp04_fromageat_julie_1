@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { PollutionService } from '../../../../core/services/pollution.service';
+import { AuthService } from '../../../../core/services/auth.service';
 import { AsyncPipe, DatePipe } from '@angular/common';
 
 @Component({
@@ -11,7 +12,9 @@ import { AsyncPipe, DatePipe } from '@angular/common';
 })
 export class PollutionList {
   service = inject(PollutionService);
+  authService = inject(AuthService);
   pollutions$ = this.service.getAll();
+  isAuthenticated$ = this.authService.isAuthenticated$;
 
   onDelete(id: number | undefined) {
     if (!id) return;

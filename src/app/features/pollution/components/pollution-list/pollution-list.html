@@ -1,9 +1,11 @@
 <div class="list-container">
   <div class="list-header">
     <h2>Liste des pollutions</h2>
-    <a routerLink="/pollutions/create" class="btn-new">
-      Nouvelle pollution
-    </a>
+    @if (isAuthenticated$ | async) {
+      <a routerLink="/pollutions/create" class="btn-new">
+        Nouvelle pollution
+      </a>
+    }
   </div>
 
   <div class="pollution-grid">
@@ -23,12 +25,14 @@
           <a routerLink="/pollutions/{{pollution.id}}" class="btn-action btn-view">
             Voir
           </a>
-          <a routerLink="/pollutions/{{pollution.id}}/edit" class="btn-action btn-edit">
-            Modifier
-          </a>
-          <button (click)="onDelete(pollution.id)" class="btn-action btn-delete">
-            Supprimer
-          </button>
+          @if (isAuthenticated$ | async) {
+            <a routerLink="/pollutions/{{pollution.id}}/edit" class="btn-action btn-edit">
+              Modifier
+            </a>
+            <button (click)="onDelete(pollution.id)" class="btn-action btn-delete">
+              Supprimer
+            </button>
+          }
         </div>
       </div>
     } @empty {

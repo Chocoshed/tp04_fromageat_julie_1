@@ -3,9 +3,14 @@ import { PollutionComponent } from './features/pollution/pages/pollution/polluti
 import { PollutionList } from './features/pollution/components/pollution-list/pollution-list';
 import { PollutionForm } from './features/pollution/components/pollution-form/pollution-form';
 import { PollutionDetail } from './features/pollution/components/pollution-detail/pollution-detail';
+import { LoginComponent } from './features/auth/components/login/login.component';
+import { RegisterComponent } from './features/auth/components/register/register.component';
+import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'pollutions', pathMatch: 'full' },
+  { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
   {
     path: 'pollutions',
     component: PollutionComponent,
@@ -17,10 +22,12 @@ export const routes: Routes = [
       {
         path: 'create',
         component: PollutionForm,
+        canActivate: [authGuard]
       },
       {
         path: ':id/edit',
         component: PollutionForm,
+        canActivate: [authGuard]
       },
       {
         path: ':id',
@@ -32,5 +39,6 @@ export const routes: Routes = [
     path: 'utilisateurs',
     loadChildren: () =>
       import('./features/utilisateur/routes').then((m) => m.utilisateurRoutes),
+    canActivate: [authGuard]
   },
 ];

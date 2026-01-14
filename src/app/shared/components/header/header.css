@@ -10,6 +10,9 @@ nav {
   max-width: 1400px;
   margin: 0 auto;
   padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 nav ul {
@@ -19,7 +22,63 @@ nav ul {
   display: flex;
   gap: 2rem;
   align-items: center;
-  justify-content: center;
+}
+
+.auth-section {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.user-name {
+  color: white;
+  font-weight: 500;
+  margin-right: 0.5rem;
+}
+
+.btn-logout,
+.btn-login,
+.btn-register {
+  padding: 0.5rem 1.2rem;
+  border-radius: 6px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.btn-logout {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1px solid white;
+}
+
+.btn-logout:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.btn-login {
+  background-color: transparent;
+  color: white;
+  border: 1px solid white;
+  display: inline-block;
+}
+
+.btn-login:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.btn-register {
+  background-color: white;
+  color: var(--primary-green);
+  border: none;
+  display: inline-block;
+}
+
+.btn-register:hover {
+  background-color: #f0f0f0;
+  transform: translateY(-2px);
 }
 
 nav li {
