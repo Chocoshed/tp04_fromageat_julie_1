@@ -2,7 +2,9 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '../../../../core/services/auth.service';
+import { Store } from '@ngxs/store';
+import { Login } from '../../../../core/store/auth/auth.actions';
+import { AuthState } from '../../../../core/store/auth/auth.state';
 
 @Component({
   selector: 'app-login',
@@ -13,10 +15,11 @@ import { AuthService } from '../../../../core/services/auth.service';
 })
 export class LoginComponent {
   loginForm: FormGroup;
-  authService = inject(AuthService);
-  router = inject(Router);
-  errorMessage: string = '';
-  isLoading: boolean = false;
+  private store = inject(Store);
+  private router = inject(Router);
+
+  error$ = this.store.select(AuthState.error);
+  loading$ = this.store.select(AuthState.loading);
 
   constructor(private fb: FormBuilder) {
     this.loginForm = this.fb.group({
@@ -30,17 +33,9 @@ export class LoginComponent {
       return;
     }
 
-    this.isLoading = true;
-    this.errorMessage = '';
-
-    this.authService.login(this.loginForm.value).subscribe({
+    this.store.dispatch(new Login(this.loginForm.value)).subscribe({
       next: () => {
         this.router.navigate(['/pollutions']);
-      },
-      error: (err) => {
-        this.isLoading = false;
-        this.errorMessage = err.error?.message || 'Erreur lors de la connexion. Veuillez réessayer.';
-        console.error('Erreur de connexion:', err);
       }
     });
   }

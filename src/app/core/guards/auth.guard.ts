@@ -1,15 +1,18 @@
 import { CanActivateFn, Router } from '@angular/router';
 import { inject } from '@angular/core';
-import { AuthService } from '../services/auth.service';
+import { Store } from '@ngxs/store';
+import { AuthState } from '../store/auth/auth.state';
 
 /**
  * Guard pour protéger les routes qui nécessitent une authentification
  */
 export const authGuard: CanActivateFn = (route, state) => {
-  const authService = inject(AuthService);
+  const store = inject(Store);
   const router = inject(Router);
 
-  if (authService.isAuthenticated()) {
+  const isAuthenticated = store.selectSnapshot(AuthState.isAuthenticated);
+
+  if (isAuthenticated) {
     return true;
   }
 

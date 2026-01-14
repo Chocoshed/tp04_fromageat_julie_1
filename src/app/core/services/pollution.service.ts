@@ -1,13 +1,10 @@
 import { Injectable, Inject } from '@angular/core';
 import { Pollution } from '../models/pollution.model';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({ providedIn: 'root' })
 export class PollutionService {
-  private _pollutions = new BehaviorSubject<Pollution[]>([]);
-  pollutions$ = this._pollutions.asObservable();
-
   constructor(private http: HttpClient, @Inject('API_URL') private apiUrl: string) {}
 
   getAll(): Observable<Pollution[]> {

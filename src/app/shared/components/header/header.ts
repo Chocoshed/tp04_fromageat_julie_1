@@ -1,7 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule, AsyncPipe } from '@angular/common';
-import { AuthService } from '../../../core/services/auth.service';
+import { Store } from '@ngxs/store';
+import { Logout } from '../../../core/store/auth/auth.actions';
+import { AuthState } from '../../../core/store/auth/auth.state';
 
 @Component({
   selector: 'app-header',
@@ -11,14 +13,14 @@ import { AuthService } from '../../../core/services/auth.service';
   styleUrls: ['./header.css']
 })
 export class HeaderComponent {
-  authService = inject(AuthService);
-  router = inject(Router);
+  private store = inject(Store);
+  private router = inject(Router);
 
-  currentUser$ = this.authService.currentUser$;
-  isAuthenticated$ = this.authService.isAuthenticated$;
+  currentUser$ = this.store.select(AuthState.user);
+  isAuthenticated$ = this.store.select(AuthState.isAuthenticated);
 
   logout(): void {
-    this.authService.logout();
+    this.store.dispatch(new Logout());
     this.router.navigate(['/login']);
   }
 }

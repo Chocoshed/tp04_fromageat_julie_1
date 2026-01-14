@@ -4,12 +4,12 @@
     <a routerLink="/pollutions" class="btn-back">← Retour à la liste</a>
   </div>
 
-  @if (isLoading) {
+  @if (isLoading$ | async) {
     <div class="loading-state">
       <div class="loading-spinner">⏳</div>
       <p>Chargement...</p>
     </div>
-  } @else if (pollution) {
+  } @else if (pollution$ | async; as pollution) {
     <div class="detail-card">
       <div class="detail-title-section">
         <h3 class="detail-title">{{ pollution.titre }}</h3>

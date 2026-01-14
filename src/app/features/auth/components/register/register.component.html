@@ -2,7 +2,7 @@
   <div class="register-card">
     <h1>Inscription</h1>
 
-    @if (errorMessage) {
+    @if (error$ | async; as errorMessage) {
       <div class="error-message">
         {{ errorMessage }}
       </div>
@@ -105,8 +105,8 @@
         }
       </div>
 
-      <button type="submit" [disabled]="registerForm.invalid || isLoading" class="btn-primary">
-        @if (isLoading) {
+      <button type="submit" [disabled]="registerForm.invalid || (loading$ | async)" class="btn-primary">
+        @if (loading$ | async) {
           <span>Inscription en cours...</span>
         } @else {
           <span>S'inscrire</span>

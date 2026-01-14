@@ -1,16 +1,18 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
+import { Store } from '@ngxs/store';
+import { AuthState } from '../store/auth/auth.state';
+import { Logout } from '../store/auth/auth.actions';
 
 /**
  * Intercepteur HTTP pour ajouter automatiquement le token JWT aux requêtes
  */
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  const authService = inject(AuthService);
+  const store = inject(Store);
   const router = inject(Router);
-  const token = authService.getToken();
+  const token = store.selectSnapshot(AuthState.token);
 
   // Cloner la requête et ajouter le header Authorization si le token existe
   if (token) {
@@ -26,7 +28,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     catchError((error) => {
       if (error.status === 401) {
         // Token invalide ou expiré, déconnecter l'utilisateur
-        authService.logout();
+        store.dispatch(new Logout());
         router.navigate(['/login']);
       }
       return throwError(() => error);

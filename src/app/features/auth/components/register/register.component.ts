@@ -2,7 +2,9 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '../../../../core/services/auth.service';
+import { Store } from '@ngxs/store';
+import { Register } from '../../../../core/store/auth/auth.actions';
+import { AuthState } from '../../../../core/store/auth/auth.state';
 
 @Component({
   selector: 'app-register',
@@ -13,10 +15,11 @@ import { AuthService } from '../../../../core/services/auth.service';
 })
 export class RegisterComponent {
   registerForm: FormGroup;
-  authService = inject(AuthService);
-  router = inject(Router);
-  errorMessage: string = '';
-  isLoading: boolean = false;
+  private store = inject(Store);
+  private router = inject(Router);
+
+  error$ = this.store.select(AuthState.error);
+  loading$ = this.store.select(AuthState.loading);
 
   constructor(private fb: FormBuilder) {
     this.registerForm = this.fb.group({
@@ -49,21 +52,12 @@ export class RegisterComponent {
       return;
     }
 
-    this.isLoading = true;
-    this.errorMessage = '';
-
     // Extraire les données sans confirmPass
     const { confirmPass, ...registerData } = this.registerForm.value;
 
-    this.authService.register(registerData).subscribe({
+    this.store.dispatch(new Register(registerData)).subscribe({
       next: () => {
-        // Rediriger vers la page des pollutions après inscription réussie
         this.router.navigate(['/pollutions']);
-      },
-      error: (err) => {
-        this.isLoading = false;
-        this.errorMessage = err.error?.message || 'Erreur lors de l\'inscription. Veuillez réessayer.';
-        console.error('Erreur d\'inscription:', err);
       }
     });
   }

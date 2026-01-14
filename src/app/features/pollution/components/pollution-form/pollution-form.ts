@@ -9,9 +9,11 @@ import {
   ValidationErrors,
 } from '@angular/forms';
 import { Pollution } from '../../../../core/models/pollution.model';
-import { PollutionService } from '../../../../core/services/pollution.service';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { PollutionRecap } from '../pollution-recap/pollution-recap';
+import { Store } from '@ngxs/store';
+import { LoadPollutionById, CreatePollution, UpdatePollution } from '../../../../core/store/pollution/pollution.actions';
+import { PollutionState } from '../../../../core/store/pollution/pollution.state';
 
 @Component({
   selector: 'app-pollution-form',
@@ -23,9 +25,9 @@ import { PollutionRecap } from '../pollution-recap/pollution-recap';
 export class PollutionForm implements OnInit {
   @Output() pollutionSubmitted = new EventEmitter<Pollution>();
   pollutionForm: FormGroup;
-  service = inject(PollutionService);
-  router = inject(Router);
-  route = inject(ActivatedRoute);
+  private store = inject(Store);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
   isEditMode = false;
   pollutionId?: number;
@@ -62,7 +64,10 @@ export class PollutionForm implements OnInit {
       this.pollutionId = +id; // Convertir en nombre
 
       // Charger les données de la pollution
-      this.service.getById(this.pollutionId).subscribe((pollution) => {
+      this.store.dispatch(new LoadPollutionById(this.pollutionId));
+
+      // S'abonner aux changements de pollution
+      this.store.select(PollutionState.selectedPollution).subscribe((pollution) => {
         if (pollution) {
           // Formater la date pour l'input type="date"
           let dateValue = '';
@@ -130,15 +135,24 @@ export class PollutionForm implements OnInit {
   onSubmit() {
     if (this.pollutionForm.valid) {
       const pollution = this.pollutionForm.value as Pollution;
-
-      if (this.isEditMode && this.pollutionId) {
-        // Mode édition
-        this.service.update(this.pollutionId, pollution).subscribe((createdPollution) => {
-          this.submittedPollution = createdPollution;
-          this.showRecap = true;
+tore.dispatch(new UpdatePollution(this.pollutionId, pollution)).subscribe(() => {
+          this.store.select(PollutionState.selectedPollution).subscribe(updatedPollution => {
+            if (updatedPollution) {
+              this.submittedPollution = updatedPollution;
+              this.showRecap = true;
+            }
+          });
         });
       } else {
         // Mode création
+        this.store.dispatch(new CreatePollution(pollution)).subscribe(() => {
+          // Récupérer la pollution nouvellement créée depuis le store
+          this.store.select(PollutionState.pollutions).subscribe(pollutions => {
+            if (pollutions.length > 0) {
+              this.submittedPollution = pollutions[pollutions.length - 1];
+              this.showRecap = true;
+            }
+          })
         this.service.create(pollution).subscribe((createdPollution) => {
           this.submittedPollution = createdPollution;
           this.showRecap = true;

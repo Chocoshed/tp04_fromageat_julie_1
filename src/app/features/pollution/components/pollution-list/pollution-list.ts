@@ -1,7 +1,9 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { PollutionService } from '../../../../core/services/pollution.service';
-import { AuthService } from '../../../../core/services/auth.service';
+import { Store } from '@ngxs/store';
+import { LoadPollutions, DeletePollution } from '../../../../core/store/pollution/pollution.actions';
+import { PollutionState } from '../../../../core/store/pollution/pollution.state';
+import { AuthState } from '../../../../core/store/auth/auth.state';
 import { AsyncPipe, DatePipe } from '@angular/common';
 
 @Component({
@@ -10,28 +12,22 @@ import { AsyncPipe, DatePipe } from '@angular/common';
   templateUrl: './pollution-list.html',
   styleUrl: './pollution-list.css'
 })
-export class PollutionList {
-  service = inject(PollutionService);
-  authService = inject(AuthService);
-  pollutions$ = this.service.getAll();
-  isAuthenticated$ = this.authService.isAuthenticated$;
+export class PollutionList implements OnInit {
+  private store = inject(Store);
+
+  pollutions$ = this.store.select(PollutionState.pollutions);
+  loading$ = this.store.select(PollutionState.loading);
+  isAuthenticated$ = this.store.select(AuthState.isAuthenticated);
+
+  ngOnInit() {
+    this.store.dispatch(new LoadPollutions());
+  }
 
   onDelete(id: number | undefined) {
     if (!id) return;
 
-    // Demander confirmation avant de supprimer
     if (confirm('Êtes-vous sûr de vouloir supprimer cette pollution ?')) {
-      this.service.delete(id).subscribe({
-        next: () => {
-          console.log('Pollution supprimée avec succès');
-          // Rafraîchir la liste des pollutions après suppression
-          this.pollutions$ = this.service.getAll();
-        },
-        error: (err) => {
-          console.error('Erreur lors de la suppression:', err);
-          alert('Erreur lors de la suppression de la pollution');
-        }
-      });
+      this.store.dispatch(new DeletePollution(id));
     }
   }
 }

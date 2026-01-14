@@ -1,6 +1,8 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './shared/components/header/header';
+import { Store } from '@ngxs/store';
+import { CheckAuthStatus } from './core/store/auth/auth.actions';
 
 @Component({
   selector: 'app-root',
@@ -8,6 +10,12 @@ import { HeaderComponent } from './shared/components/header/header';
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App {
+export class App implements OnInit {
   protected readonly title = signal('tp3_2');
+  private store = inject(Store);
+
+  ngOnInit() {
+    // Vérifier si l'utilisateur est déjà connecté au chargement
+    this.store.dispatch(new CheckAuthStatus());
+  }
 }
