@@ -135,7 +135,10 @@ export class PollutionForm implements OnInit {
   onSubmit() {
     if (this.pollutionForm.valid) {
       const pollution = this.pollutionForm.value as Pollution;
-tore.dispatch(new UpdatePollution(this.pollutionId, pollution)).subscribe(() => {
+
+      if (this.pollutionId) {
+        // Mode édition
+        this.store.dispatch(new UpdatePollution(this.pollutionId, pollution)).subscribe(() => {
           this.store.select(PollutionState.selectedPollution).subscribe(updatedPollution => {
             if (updatedPollution) {
               this.submittedPollution = updatedPollution;
@@ -152,10 +155,7 @@ tore.dispatch(new UpdatePollution(this.pollutionId, pollution)).subscribe(() => 
               this.submittedPollution = pollutions[pollutions.length - 1];
               this.showRecap = true;
             }
-          })
-        this.service.create(pollution).subscribe((createdPollution) => {
-          this.submittedPollution = createdPollution;
-          this.showRecap = true;
+          });
         });
       }
     } else {

@@ -45,12 +45,5 @@ export class PollutionDetail implements OnInit {
 
   ngOnDestroy() {
     this.store.dispatch(new ClearSelectedPollution());
-        },
-        error: (err) => {
-          console.error('Erreur lors de la suppression:', err);
-          alert('Erreur lors de la suppression');
-        }
-      });
-    }
   }
 }
