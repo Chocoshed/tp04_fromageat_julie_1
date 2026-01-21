@@ -2,7 +2,6 @@ import { Utilisateur } from './utilisateur.model';
 
 export interface AuthResponse {
   user: Utilisateur;
-  token: string;
 }
 
 export interface LoginCredentials {

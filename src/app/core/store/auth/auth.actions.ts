@@ -1,4 +1,5 @@
 import { LoginCredentials, RegisterData } from '../../models/auth.model';
+import { Utilisateur } from '../../models/utilisateur.model';
 
 export class Login {
   static readonly type = '[Auth] Login';
@@ -7,7 +8,7 @@ export class Login {
 
 export class LoginSuccess {
   static readonly type = '[Auth] Login Success';
-  constructor(public payload: { user: any; token: string }) {}
+  constructor(public payload: { user: Utilisateur }) {}
 }
 
 export class LoginFailure {
@@ -22,7 +23,7 @@ export class Register {
 
 export class RegisterSuccess {
   static readonly type = '[Auth] Register Success';
-  constructor(public payload: { user: any; token: string }) {}
+  constructor(public payload: { user: Utilisateur }) {}
 }
 
 export class RegisterFailure {
@@ -34,8 +35,8 @@ export class Logout {
   static readonly type = '[Auth] Logout';
 }
 
-export class CheckAuthStatus {
-  static readonly type = '[Auth] Check Auth Status';
+export class InitAuth {
+  static readonly type = '[Auth] Init Auth';
 }
 
 export class GetCurrentUser {

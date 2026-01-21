@@ -15,27 +15,35 @@ export class AuthService {
    * Inscription d'un nouvel utilisateur
    */
   register(data: RegisterData): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/utilisateur/register`, data);
+    return this.http.post<AuthResponse>(`${this.apiUrl}/utilisateur/register`, data, {
+      withCredentials: true
+    });
   }
 
   /**
    * Connexion d'un utilisateur
    */
   login(credentials: LoginCredentials): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/utilisateur/login`, credentials);
+    return this.http.post<AuthResponse>(`${this.apiUrl}/utilisateur/login`, credentials, {
+      withCredentials: true
+    });
   }
 
   /**
-   * Récupérer le token depuis localStorage
+   * Déconnexion de l'utilisateur
    */
-  getToken(): string | null {
-    return localStorage.getItem('auth_token');
+  logout(): Observable<any> {
+    return this.http.post(`${this.apiUrl}/utilisateur/logout`, {}, {
+      withCredentials: true
+    });
   }
 
   /**
    * Récupérer l'utilisateur connecté depuis l'API
    */
   getCurrentUser(): Observable<Utilisateur> {
-    return this.http.get<Utilisateur>(`${this.apiUrl}/utilisateur/me`);
+    return this.http.get<Utilisateur>(`${this.apiUrl}/utilisateur/me`, {
+      withCredentials: true
+    });
   }
 }

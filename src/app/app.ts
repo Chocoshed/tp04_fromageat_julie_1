@@ -2,7 +2,7 @@ import { Component, signal, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './shared/components/header/header';
 import { Store } from '@ngxs/store';
-import { CheckAuthStatus } from './core/store/auth/auth.actions';
+import { InitAuth } from './core/store/auth/auth.actions';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +15,6 @@ export class App implements OnInit {
   private store = inject(Store);
 
   ngOnInit() {
-    // Vérifier si l'utilisateur est déjà connecté au chargement
-    this.store.dispatch(new CheckAuthStatus());
+    this.store.dispatch(new InitAuth());
   }
 }

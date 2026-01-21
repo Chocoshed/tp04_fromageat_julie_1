@@ -1,18 +1,15 @@
 import { Injectable, inject } from '@angular/core';
 import { State, Action, StateContext, Selector } from '@ngxs/store';
 import { tap, catchError } from 'rxjs/operators';
-import { throwError } from 'rxjs';
+import { throwError, of } from 'rxjs';
 import { AuthStateModel } from './auth-state.model';
 import { AuthService } from '../../services/auth.service';
 import * as AuthActions from './auth.actions';
-
-const TOKEN_KEY = 'auth_token';
 
 @State<AuthStateModel>({
   name: 'auth',
   defaults: {
     user: null,
-    token: null,
     isAuthenticated: false,
     loading: false,
     error: null
@@ -26,11 +23,6 @@ export class AuthState {
   @Selector()
   static user(state: AuthStateModel) {
     return state.user;
-  }
-
-  @Selector()
-  static token(state: AuthStateModel) {
-    return state.token;
   }
 
   @Selector()
@@ -66,10 +58,8 @@ export class AuthState {
 
   @Action(AuthActions.LoginSuccess)
   loginSuccess(ctx: StateContext<AuthStateModel>, action: AuthActions.LoginSuccess) {
-    localStorage.setItem(TOKEN_KEY, action.payload.token);
     ctx.patchState({
       user: action.payload.user,
-      token: action.payload.token,
       isAuthenticated: true,
       loading: false,
       error: null
@@ -101,10 +91,8 @@ export class AuthState {
 
   @Action(AuthActions.RegisterSuccess)
   registerSuccess(ctx: StateContext<AuthStateModel>, action: AuthActions.RegisterSuccess) {
-    localStorage.setItem(TOKEN_KEY, action.payload.token);
     ctx.patchState({
       user: action.payload.user,
-      token: action.payload.token,
       isAuthenticated: true,
       loading: false,
       error: null
@@ -121,36 +109,49 @@ export class AuthState {
 
   @Action(AuthActions.Logout)
   logout(ctx: StateContext<AuthStateModel>) {
-    localStorage.removeItem(TOKEN_KEY);
-    ctx.setState({
-      user: null,
-      token: null,
-      isAuthenticated: false,
-      loading: false,
-      error: null
-    });
+    return this.authService.logout().pipe(
+      tap(() => {
+        ctx.setState({
+          user: null,
+          isAuthenticated: false,
+          loading: false,
+          error: null
+        });
+      }),
+      catchError((error) => {
+        // Même en cas d'erreur, on déconnecte côté client
+        ctx.setState({
+          user: null,
+          isAuthenticated: false,
+          loading: false,
+          error: null
+        });
+        return of(null);
+      })
+    );
   }
 
-  @Action(AuthActions.CheckAuthStatus)
-  checkAuthStatus(ctx: StateContext<AuthStateModel>) {
-    const token = localStorage.getItem(TOKEN_KEY);
-    if (token) {
-      ctx.patchState({ token, loading: true });
-      return this.authService.getCurrentUser().pipe(
-        tap((user) => {
-          ctx.patchState({
-            user,
-            isAuthenticated: true,
-            loading: false
-          });
-        }),
-        catchError(() => {
-          ctx.dispatch(new AuthActions.Logout());
-          return throwError(() => new Error('Token invalide'));
-        })
-      );
-    }
-    return;
+  @Action(AuthActions.InitAuth)
+  initAuth(ctx: StateContext<AuthStateModel>) {
+    ctx.patchState({ loading: true });
+    return this.authService.getCurrentUser().pipe(
+      tap((user) => {
+        ctx.patchState({
+          user,
+          isAuthenticated: true,
+          loading: false
+        });
+      }),
+      catchError(() => {
+        // Si l'appel échoue, l'utilisateur n'est pas authentifié
+        ctx.patchState({
+          user: null,
+          isAuthenticated: false,
+          loading: false
+        });
+        return of(null);
+      })
+    );
   }
 
   @Action(AuthActions.GetCurrentUser)
