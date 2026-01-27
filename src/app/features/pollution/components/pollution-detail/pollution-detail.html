@@ -19,6 +19,16 @@
       </div>
 
       <div class="detail-content">
+        @if (pollution.utilisateur) {
+          <div class="detail-section decouveur-section">
+            <span class="section-label">Déclaré par</span>
+            <p class="decouveur-info">
+              <strong>{{ pollution.utilisateur.prenom }} {{ pollution.utilisateur.nom }}</strong>
+              <span class="login">({{ pollution.utilisateur.login }})</span>
+            </p>
+          </div>
+        }
+
         <div class="detail-section">
           <span class="section-label">Description</span>
           <p class="description-text">{{ pollution.description }}</p>
@@ -65,16 +75,20 @@
 
       @if (isAuthenticated$ | async) {
         <div class="detail-actions">
-          <a
-            [routerLink]="['/pollutions', pollution.id, 'edit']"
-            class="btn-action btn-edit">
-            Modifier
-          </a>
-          <button
-            (click)="onDelete()"
-            class="btn-action btn-delete">
-            Supprimer
-          </button>
+          @if (canEdit$ | async) {
+            <a
+              [routerLink]="['/pollutions', pollution.id, 'edit']"
+              class="btn-action btn-edit">
+              Modifier
+            </a>
+          }
+          @if (canDelete$ | async) {
+            <button
+              (click)="onDelete()"
+              class="btn-action btn-delete">
+              Supprimer
+            </button>
+          }
         </div>
       }
     </div>

@@ -84,6 +84,19 @@
   margin-bottom: 0.5rem;
 }
 
+.decouveur {
+  color: #2196f3;
+  font-size: 0.9rem;
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+  background: #e3f2fd;
+  border-radius: 6px;
+}
+
+.decouveur strong {
+  color: #1565c0;
+}
+
 .pollution-info {
   color: var(--text-secondary);
   font-size: 0.95rem;

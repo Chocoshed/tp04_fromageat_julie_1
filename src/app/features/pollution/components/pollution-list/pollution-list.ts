@@ -18,9 +18,15 @@ export class PollutionList implements OnInit {
   pollutions$ = this.store.select(PollutionState.pollutions);
   loading$ = this.store.select(PollutionState.loading);
   isAuthenticated$ = this.store.select(AuthState.isAuthenticated);
+  currentUserId?: string;
 
   ngOnInit() {
     this.store.dispatch(new LoadPollutions());
+    this.currentUserId = this.store.selectSnapshot(AuthState.user)?.id;
+  }
+
+  canEdit(pollutionUserId?: string): boolean {
+    return !!this.currentUserId && this.currentUserId === pollutionUserId;
   }
 
   onDelete(id: number | undefined) {

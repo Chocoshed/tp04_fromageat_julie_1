@@ -93,6 +93,30 @@
   padding-bottom: 0;
 }
 
+/* Section découvreur */
+.decouveur-section {
+  background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
+  padding: 1.5rem;
+  border-radius: 8px;
+  border-left: 4px solid #2196f3;
+}
+
+.decouveur-info {
+  font-size: 1.1rem;
+  color: var(--text-primary);
+}
+
+.decouveur-info strong {
+  color: var(--primary-dark);
+  font-weight: 700;
+}
+
+.decouveur-info .login {
+  color: #666;
+  font-style: italic;
+  margin-left: 0.5rem;
+}
+
 .section-label {
   display: block;
   color: var(--primary-dark);

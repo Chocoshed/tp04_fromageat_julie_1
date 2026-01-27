@@ -8,4 +8,11 @@ export interface Pollution {
   latitude: number;
   longitude: number;
   photo_url?: string;  // Modifié pour correspondre à l'API
+  utilisateur_id?: string;
+  utilisateur?: {
+    id: string;
+    nom: string;
+    prenom: string;
+    login: string;
+  };
 }

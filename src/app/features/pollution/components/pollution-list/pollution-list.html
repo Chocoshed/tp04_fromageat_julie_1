@@ -13,6 +13,11 @@
       <div class="pollution-card">
         <h3>{{ pollution.titre }}</h3>
         <span class="pollution-type">{{ pollution.type_pollution }}</span>
+        @if (pollution.utilisateur) {
+          <p class="decouveur">
+            <small>Déclaré par <strong>{{ pollution.utilisateur.prenom }} {{ pollution.utilisateur.nom }}</strong></small>
+          </p>
+        }
         <p class="pollution-info"><strong>Description:</strong> {{ pollution.description }}</p>
         <p class="pollution-info"><strong>Date:</strong> {{ pollution.date_observation | date:'medium' }}</p>
         <p class="pollution-info"><strong>Lieu:</strong> {{ pollution.lieu }}</p>
@@ -25,7 +30,7 @@
           <a routerLink="/pollutions/{{pollution.id}}" class="btn-action btn-view">
             Voir
           </a>
-          @if (isAuthenticated$ | async) {
+          @if (canEdit(pollution.utilisateur_id)) {
             <a routerLink="/pollutions/{{pollution.id}}/edit" class="btn-action btn-edit">
               Modifier
             </a>
