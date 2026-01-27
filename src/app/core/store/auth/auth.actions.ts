@@ -8,7 +8,7 @@ export class Login {
 
 export class LoginSuccess {
   static readonly type = '[Auth] Login Success';
-  constructor(public payload: { user: Utilisateur }) {}
+  constructor(public payload: { user: Utilisateur; token: string }) {}
 }
 
 export class LoginFailure {
@@ -23,7 +23,7 @@ export class Register {
 
 export class RegisterSuccess {
   static readonly type = '[Auth] Register Success';
-  constructor(public payload: { user: Utilisateur }) {}
+  constructor(public payload: { user: Utilisateur; token: string }) {}
 }
 
 export class RegisterFailure {

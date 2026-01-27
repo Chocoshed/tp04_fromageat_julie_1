@@ -10,6 +10,7 @@ import * as AuthActions from './auth.actions';
   name: 'auth',
   defaults: {
     user: null,
+    token: null,
     isAuthenticated: false,
     loading: false,
     error: null
@@ -40,6 +41,11 @@ export class AuthState {
     return state.error;
   }
 
+  @Selector()
+  static token(state: AuthStateModel) {
+    return state.token;
+  }
+
   // Actions
   @Action(AuthActions.Login)
   login(ctx: StateContext<AuthStateModel>, action: AuthActions.Login) {
@@ -58,8 +64,12 @@ export class AuthState {
 
   @Action(AuthActions.LoginSuccess)
   loginSuccess(ctx: StateContext<AuthStateModel>, action: AuthActions.LoginSuccess) {
+    // Stocker le token dans localStorage
+    localStorage.setItem('auth_token', action.payload.token);
+
     ctx.patchState({
       user: action.payload.user,
+      token: action.payload.token,
       isAuthenticated: true,
       loading: false,
       error: null
@@ -91,8 +101,12 @@ export class AuthState {
 
   @Action(AuthActions.RegisterSuccess)
   registerSuccess(ctx: StateContext<AuthStateModel>, action: AuthActions.RegisterSuccess) {
+    // Stocker le token dans localStorage
+    localStorage.setItem('auth_token', action.payload.token);
+
     ctx.patchState({
       user: action.payload.user,
+      token: action.payload.token,
       isAuthenticated: true,
       loading: false,
       error: null
@@ -109,10 +123,14 @@ export class AuthState {
 
   @Action(AuthActions.Logout)
   logout(ctx: StateContext<AuthStateModel>) {
+    // Supprimer le token de localStorage
+    localStorage.removeItem('auth_token');
+
     return this.authService.logout().pipe(
       tap(() => {
         ctx.setState({
           user: null,
+          token: null,
           isAuthenticated: false,
           loading: false,
           error: null
@@ -122,6 +140,7 @@ export class AuthState {
         // Même en cas d'erreur, on déconnecte côté client
         ctx.setState({
           user: null,
+          token: null,
           isAuthenticated: false,
           loading: false,
           error: null
@@ -133,7 +152,21 @@ export class AuthState {
 
   @Action(AuthActions.InitAuth)
   initAuth(ctx: StateContext<AuthStateModel>) {
-    ctx.patchState({ loading: true });
+    // Récupérer le token depuis localStorage
+    const token = localStorage.getItem('auth_token');
+
+    if (!token) {
+      ctx.patchState({
+        user: null,
+        token: null,
+        isAuthenticated: false,
+        loading: false
+      });
+      return of(null);
+    }
+
+    ctx.patchState({ token, loading: true });
+
     return this.authService.getCurrentUser().pipe(
       tap((user) => {
         ctx.patchState({
@@ -143,9 +176,11 @@ export class AuthState {
         });
       }),
       catchError(() => {
-        // Si l'appel échoue, l'utilisateur n'est pas authentifié
+        // Token invalide ou expiré
+        localStorage.removeItem('auth_token');
         ctx.patchState({
           user: null,
+          token: null,
           isAuthenticated: false,
           loading: false
         });
