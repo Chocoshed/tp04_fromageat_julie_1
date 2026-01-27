@@ -249,6 +249,28 @@
   box-shadow: 0 6px 16px rgba(244, 67, 54, 0.3);
 }
 
+.btn-favoris {
+  background: linear-gradient(135deg, #e0e0e0, #bdbdbd);
+  color: #666;
+}
+
+.btn-favoris:hover {
+  background: linear-gradient(135deg, #d5d5d5, #a8a8a8);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(158, 158, 158, 0.3);
+}
+
+.btn-favoris.favoris-active {
+  background: linear-gradient(135deg, #ffd700, #ffed4e);
+  color: #333;
+}
+
+.btn-favoris.favoris-active:hover {
+  background: linear-gradient(135deg, #ffc107, #ffd700);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(255, 215, 0, 0.4);
+}
+
 .loading-state {
   text-align: center;
   padding: 4rem 2rem;

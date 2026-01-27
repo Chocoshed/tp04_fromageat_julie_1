@@ -4,11 +4,12 @@ import { Store } from '@ngxs/store';
 import { LoadPollutions, DeletePollution } from '../../../../core/store/pollution/pollution.actions';
 import { PollutionState } from '../../../../core/store/pollution/pollution.state';
 import { AuthState } from '../../../../core/store/auth/auth.state';
-import { AsyncPipe, DatePipe } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
+import { PollutionCardComponent } from '../pollution-card/pollution-card';
 
 @Component({
   selector: 'app-pollution-list',
-  imports: [AsyncPipe, DatePipe, RouterLink],
+  imports: [AsyncPipe, RouterLink, PollutionCardComponent],
   templateUrl: './pollution-list.html',
   styleUrl: './pollution-list.css'
 })

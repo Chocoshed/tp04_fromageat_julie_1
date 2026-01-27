@@ -7,6 +7,7 @@ import { withNgxsLoggerPlugin } from '@ngxs/logger-plugin';
 import { withNgxsReduxDevtoolsPlugin } from '@ngxs/devtools-plugin';
 import { AuthState } from './core/store/auth/auth.state';
 import { PollutionState } from './core/store/pollution/pollution.state';
+import { FavorisState } from './core/state/favoris/favoris.state';
 
 import { routes } from './app.routes';
 
@@ -21,7 +22,7 @@ export const appConfig: ApplicationConfig = {
     { provide: 'API_URL', useValue: API_URL }, // Fournir l'URL de l'API comme dépendance injectable
     provideHttpClient(withInterceptors([authInterceptor])), // Activer HttpClient avec l'intercepteur d'authentification
     provideStore(
-      [AuthState, PollutionState],
+      [AuthState, PollutionState, FavorisState],
       withNgxsLoggerPlugin(),
       withNgxsReduxDevtoolsPlugin()
     )

@@ -5,6 +5,8 @@ import { Store } from '@ngxs/store';
 import { LoadPollutionById, DeletePollution, ClearSelectedPollution } from '../../../../core/store/pollution/pollution.actions';
 import { PollutionState } from '../../../../core/store/pollution/pollution.state';
 import { AuthState } from '../../../../core/store/auth/auth.state';
+import { FavorisState } from '../../../../core/state/favoris/favoris.state';
+import { ToggleFavoris } from '../../../../core/state/favoris/favoris.actions';
 import { Pollution } from '../../../../core/models/pollution.model';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
@@ -63,6 +65,18 @@ export class PollutionDetail implements OnInit {
         }
       }
     }).unsubscribe();
+  }
+
+  isFavoris(): boolean {
+    const pollution = this.store.selectSnapshot(PollutionState.selectedPollution);
+    if (!pollution?.id) return false;
+    return this.store.selectSnapshot(FavorisState.isFavoris)(pollution.id.toString());
+  }
+
+  onToggleFavoris(): void {
+    const pollution = this.store.selectSnapshot(PollutionState.selectedPollution);
+    if (!pollution?.id) return;
+    this.store.dispatch(new ToggleFavoris(pollution.id.toString()));
   }
 
   ngOnDestroy() {

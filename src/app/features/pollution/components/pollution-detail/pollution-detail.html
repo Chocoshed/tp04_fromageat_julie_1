@@ -75,6 +75,12 @@
 
       @if (isAuthenticated$ | async) {
         <div class="detail-actions">
+          <button
+            class="btn-action btn-favoris"
+            [class.favoris-active]="isFavoris()"
+            (click)="onToggleFavoris()">
+            {{ isFavoris() ? '★ Retirer des favoris' : '☆ Ajouter aux favoris' }}
+          </button>
           @if (canEdit$ | async) {
             <a
               [routerLink]="['/pollutions', pollution.id, 'edit']"

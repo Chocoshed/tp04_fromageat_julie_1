@@ -3,6 +3,14 @@
     <ul>
       <li><a routerLink="/pollutions" routerLinkActive="active">Pollutions</a></li>
       @if (isAuthenticated$ | async) {
+        <li>
+          <a routerLink="/favoris" routerLinkActive="active" class="favoris-link">
+            Favoris
+            @if (favorisCount$ | async; as count) {
+              <span class="badge" [class.has-favoris]="count > 0">{{ count }}</span>
+            }
+          </a>
+        </li>
         <li><a routerLink="/utilisateurs" routerLinkActive="active">Utilisateurs</a></li>
       }
     </ul>

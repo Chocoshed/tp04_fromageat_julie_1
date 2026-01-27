@@ -3,6 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './shared/components/header/header';
 import { Store } from '@ngxs/store';
 import { InitAuth } from './core/store/auth/auth.actions';
+import { LoadFavoris } from './core/state/favoris/favoris.actions';
 
 @Component({
   selector: 'app-root',
@@ -16,5 +17,6 @@ export class App implements OnInit {
 
   ngOnInit() {
     this.store.dispatch(new InitAuth());
+    this.store.dispatch(new LoadFavoris());
   }
 }

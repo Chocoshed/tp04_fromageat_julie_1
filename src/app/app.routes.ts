@@ -36,6 +36,12 @@ export const routes: Routes = [
     ],
   },
   {
+    path: 'favoris',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/favoris/pages/favoris-page/favoris-page').then(m => m.FavorisPageComponent)
+  },
+  {
     path: 'utilisateurs',
     loadChildren: () =>
       import('./features/utilisateur/routes').then((m) => m.utilisateurRoutes),

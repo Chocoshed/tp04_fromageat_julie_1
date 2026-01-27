@@ -125,6 +125,34 @@ nav a:hover::after {
   transform: translateX(-50%) scaleX(1);
 }
 
+/* Favoris link and badge styles */
+.favoris-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.25rem;
+  height: 1.25rem;
+  padding: 0 0.375rem;
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: white;
+  background: #999;
+  border-radius: 10px;
+  transition: background 0.2s;
+}
+
+.badge.has-favoris {
+  background: #ffd700;
+  color: #333;
+}
+
 @media (max-width: 768px) {
   nav {
     padding: 1rem;
