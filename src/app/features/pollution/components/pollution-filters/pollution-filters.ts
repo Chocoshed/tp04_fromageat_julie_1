@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { POLLUTION_TYPES, POLLUTION_FILTER_STATUS } from '../../../../core/constants/pollution.constants';
 
 export interface PollutionFilters {
   types: string[];
@@ -18,16 +19,17 @@ export interface PollutionFilters {
 })
 export class PollutionFiltersComponent {
   @Output() filtersChange = new EventEmitter<PollutionFilters>();
-  
-  availableTypes = ['Plastique', 'Chimique', 'Dépôt sauvage', 'Eau', 'Air', 'Autre'];
-  
+
+  availableTypes = [...POLLUTION_TYPES];
+  filterStatus = POLLUTION_FILTER_STATUS;
+
   selectedTypes: string[] = [...this.availableTypes];
   dateDebut = '';
   dateFin = '';
   statut: 'toutes' | 'miennes' | 'favoris' = 'toutes';
-  
+
   isExpanded = false;
-  
+
   toggleType(type: string) {
     const index = this.selectedTypes.indexOf(type);
     if (index > -1) {
@@ -37,15 +39,15 @@ export class PollutionFiltersComponent {
     }
     this.emitFilters();
   }
-  
+
   onDateChange() {
     this.emitFilters();
   }
-  
+
   onStatutChange() {
     this.emitFilters();
   }
-  
+
   resetFilters() {
     this.selectedTypes = [...this.availableTypes];
     this.dateDebut = '';
@@ -53,7 +55,7 @@ export class PollutionFiltersComponent {
     this.statut = 'toutes';
     this.emitFilters();
   }
-  
+
   private emitFilters() {
     this.filtersChange.emit({
       types: this.selectedTypes,
@@ -62,7 +64,7 @@ export class PollutionFiltersComponent {
       statut: this.statut
     });
   }
-  
+
   toggleExpand() {
     this.isExpanded = !this.isExpanded;
   }

@@ -14,6 +14,7 @@ import { PollutionRecap } from '../pollution-recap/pollution-recap';
 import { Store } from '@ngxs/store';
 import { LoadPollutionById, CreatePollution, UpdatePollution } from '../../../../core/store/pollution/pollution.actions';
 import { PollutionState } from '../../../../core/store/pollution/pollution.state';
+import { POLLUTION_TYPES, POLLUTION_VALIDATION } from '../../../../core/constants/pollution.constants';
 
 @Component({
   selector: 'app-pollution-form',
@@ -34,22 +35,22 @@ export class PollutionForm implements OnInit {
   showRecap = false;
   submittedPollution?: Pollution;
 
-  pollutionTypes = ['Plastique', 'Chimique', 'Dépôt sauvage', 'Eau', 'Air', 'Autre'];
+  pollutionTypes = [...POLLUTION_TYPES];
 
   constructor(private fb: FormBuilder) {
     this.pollutionForm = this.fb.group({
-      titre: ['', [Validators.required, Validators.minLength(3)]],
+      titre: ['', [Validators.required, Validators.minLength(POLLUTION_VALIDATION.TITRE_MIN_LENGTH)]],
       type_pollution: ['', Validators.required],
-      description: ['', [Validators.required, Validators.minLength(10)]],
+      description: ['', [Validators.required, Validators.minLength(POLLUTION_VALIDATION.DESCRIPTION_MIN_LENGTH)]],
       date_observation: ['', [Validators.required, this.dateValidator]],
-      lieu: ['', [Validators.required, Validators.minLength(3)]],
+      lieu: ['', [Validators.required, Validators.minLength(POLLUTION_VALIDATION.LIEU_MIN_LENGTH)]],
       latitude: [
         '',
-        [Validators.required, Validators.min(-90), Validators.max(90), this.numberValidator],
+        [Validators.required, Validators.min(POLLUTION_VALIDATION.LATITUDE_MIN), Validators.max(POLLUTION_VALIDATION.LATITUDE_MAX), this.numberValidator],
       ],
       longitude: [
         '',
-        [Validators.required, Validators.min(-180), Validators.max(180), this.numberValidator],
+        [Validators.required, Validators.min(POLLUTION_VALIDATION.LONGITUDE_MIN), Validators.max(POLLUTION_VALIDATION.LONGITUDE_MAX), this.numberValidator],
       ],
       photo_url: ['', [Validators.pattern('https?://.+')]],
     });
@@ -122,9 +123,9 @@ export class PollutionForm implements OnInit {
       return { futureDate: true };
     }
 
-    // Vérifier que la date n'est pas trop ancienne (exemple: pas plus de 10 ans)
+    // Vérifier que la date n'est pas trop ancienne
     const tenYearsAgo = new Date();
-    tenYearsAgo.setFullYear(tenYearsAgo.getFullYear() - 10);
+    tenYearsAgo.setFullYear(tenYearsAgo.getFullYear() - POLLUTION_VALIDATION.DATE_MAX_YEARS_AGO);
     if (dateValue < tenYearsAgo) {
       return { tooOldDate: true };
     }

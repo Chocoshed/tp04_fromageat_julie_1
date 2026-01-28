@@ -12,6 +12,7 @@ import { PollutionService } from '../../../../core/services/pollution.service';
 import { fromEvent, Observable, BehaviorSubject, combineLatest } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, map, startWith } from 'rxjs/operators';
 import { Pollution } from '../../../../core/models/pollution.model';
+import { POLLUTION_TYPES, SEARCH_CONFIG } from '../../../../core/constants/pollution.constants';
 
 @Component({
   selector: 'app-pollution-list',
@@ -31,7 +32,7 @@ export class PollutionList implements OnInit, AfterViewInit {
   currentUserId?: string;
 
   private filters$ = new BehaviorSubject<PollutionFilters>({
-    types: ['Plastique', 'Chimique', 'Dépôt sauvage', 'Eau', 'Air', 'Autre'],
+    types: [...POLLUTION_TYPES],
     statut: 'toutes'
   });
 
@@ -51,7 +52,7 @@ export class PollutionList implements OnInit, AfterViewInit {
     ).pipe(
       map((event: Event) => (event.target as HTMLInputElement).value),
       map(value => value.trim()),
-      debounceTime(300),
+      debounceTime(SEARCH_CONFIG.DEBOUNCE_TIME),
       distinctUntilChanged(),
       startWith('')
     );
