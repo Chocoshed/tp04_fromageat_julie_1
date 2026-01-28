@@ -8,11 +8,11 @@ import { withNgxsReduxDevtoolsPlugin } from '@ngxs/devtools-plugin';
 import { AuthState } from './core/store/auth/auth.state';
 import { PollutionState } from './core/store/pollution/pollution.state';
 import { FavorisState } from './core/state/favoris/favoris.state';
+import { environment } from '../environments/environment';
 
 import { routes } from './app.routes';
 
-// TODO : Utilisation de l'environnement Angular pour configurer l'URL de l'API selon l'environnement (dev/prod).
-const API_URL = 'http://localhost:3000/api';
+const API_URL = environment.apiUrl;
 
 export const appConfig: ApplicationConfig = {
   providers: [
