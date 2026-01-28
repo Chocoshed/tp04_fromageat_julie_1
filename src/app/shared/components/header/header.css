@@ -70,15 +70,14 @@ nav ul {
 }
 
 .btn-register {
-  background-color: white;
-  color: var(--primary-green);
-  border: none;
+  background-color: transparent;
+  color: white;
+  border: 1px solid white;
   display: inline-block;
 }
 
 .btn-register:hover {
-  background-color: #f0f0f0;
-  transform: translateY(-2px);
+    background-color: rgba(255, 255, 255, 0.2);
 }
 
 nav li {
