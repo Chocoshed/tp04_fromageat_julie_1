@@ -1,0 +1,89 @@
+<div class="filters-container">
+  <div class="filters-header" (click)="toggleExpand()">
+    <h3>📋 Filtres</h3>
+    <button class="toggle-btn" type="button">{{ isExpanded ? '▲' : '▼' }}</button>
+  </div>
+
+  <div class="filters-content" [class.expanded]="isExpanded">
+    <!-- Filtre par type -->
+    <div class="filter-section">
+      <label class="filter-label">Type de pollution :</label>
+      <div class="type-checkboxes">
+        @for (type of availableTypes; track type) {
+          <label class="checkbox-label">
+            <input
+              type="checkbox"
+              [checked]="selectedTypes.includes(type)"
+              (change)="toggleType(type)"
+            />
+            {{ type }}
+          </label>
+        }
+      </div>
+    </div>
+
+    <!-- Filtre par période -->
+    <div class="filter-section">
+      <label class="filter-label">Période :</label>
+      <div class="date-inputs">
+        <input
+          type="date"
+          [(ngModel)]="dateDebut"
+          (change)="onDateChange()"
+          placeholder="Date de début"
+        />
+        <span class="date-separator">au</span>
+        <input
+          type="date"
+          [(ngModel)]="dateFin"
+          (change)="onDateChange()"
+          placeholder="Date de fin"
+        />
+      </div>
+    </div>
+
+    <!-- Filtre par statut -->
+    <div class="filter-section">
+      <label class="filter-label">Afficher :</label>
+      <div class="radio-group">
+        <label class="radio-label">
+          <input
+            type="radio"
+            name="statut"
+            value="toutes"
+            [(ngModel)]="statut"
+            (change)="onStatutChange()"
+          />
+          Toutes les pollutions
+        </label>
+        <label class="radio-label">
+          <input
+            type="radio"
+            name="statut"
+            value="miennes"
+            [(ngModel)]="statut"
+            (change)="onStatutChange()"
+          />
+          Mes pollutions
+        </label>
+        <label class="radio-label">
+          <input
+            type="radio"
+            name="statut"
+            value="favoris"
+            [(ngModel)]="statut"
+            (change)="onStatutChange()"
+          />
+          Mes favoris
+        </label>
+      </div>
+    </div>
+
+    <!-- Bouton reset -->
+    <div class="filter-actions">
+      <button class="reset-btn" type="button" (click)="resetFilters()">
+        🔄 Réinitialiser les filtres
+      </button>
+    </div>
+  </div>
+</div>

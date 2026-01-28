@@ -18,6 +18,9 @@
     />
   </div>
 
+  <!-- Nouveau composant de filtres -->
+  <app-pollution-filters (filtersChange)="onFiltersChange($event)"></app-pollution-filters>
+
   <div class="pollution-grid">
     @for (pollution of pollutions$|async; track $index) {
       <app-pollution-card [pollution]="pollution"></app-pollution-card>
