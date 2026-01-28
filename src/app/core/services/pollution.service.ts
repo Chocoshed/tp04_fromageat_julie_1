@@ -36,4 +36,10 @@ export class PollutionService {
       withCredentials: true
     });
   }
+
+  searchPollutions(query: string): Observable<Pollution[]> {
+    return this.http.get<Pollution[]>(`${this.apiUrl}/pollution/search?q=${encodeURIComponent(query)}`, {
+      withCredentials: true
+    });
+  }
 }

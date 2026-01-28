@@ -8,14 +8,24 @@
     }
   </div>
 
+  <div class="search-container">
+    <input
+      type="text"
+      #searchInput
+      placeholder="🔍 Rechercher une pollution (titre, lieu, type, description...)"
+      class="search-input"
+      aria-label="Rechercher une pollution"
+    />
+  </div>
+
   <div class="pollution-grid">
     @for (pollution of pollutions$|async; track $index) {
       <app-pollution-card [pollution]="pollution"></app-pollution-card>
     } @empty {
       <div class="empty-state">
         <div class="empty-state-icon">🌱</div>
-        <h3>Aucune pollution enregistrée</h3>
-        <p>Commencez par déclarer une pollution</p>
+        <h3>Aucune pollution trouvée</h3>
+        <p>Essayez une autre recherche ou déclarez une nouvelle pollution</p>
       </div>
     }
   </div>
